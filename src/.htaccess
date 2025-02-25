@@ -1,0 +1,6 @@
+DirectoryIndex index.php index.html
+php_value upload_max_filesize 1024102400
+php_value post_max_size 1024102400
+
+RewriteEngine on
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
