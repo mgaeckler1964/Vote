@@ -6,6 +6,9 @@
 		{
 			print_r( $_SERVER["HTTP_USER_AGENT"] );
 		}
-		echo(" " . $actUser["email"]);
+		if( isset($actUser) )
+		{
+			echo(" " . $actUser["email"]);
+		}
 	?>
 </p>

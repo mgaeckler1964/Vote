@@ -35,13 +35,25 @@
 		$guest = $_POST["guest"];
 
 	if( array_key_exists( "password", $_POST ) )
+	{
 		$password = $_POST["password"];
+		$source = "post";
+	}
 	else if( array_key_exists( "password", $_GET ) )
+	{
 		$password = $_GET["password"];
+		$source = "get";
+	}
 	else if( array_key_exists( "password", $_COOKIE ) )
+	{
 		$password = $_COOKIE["password"];
+		$source = "cookie";
+	}
 	else if( array_key_exists( "PHP_AUTH_PW", $_SERVER ) )
+	{
 		$password = $_SERVER['PHP_AUTH_PW'];
+		$source = "server";
+	}
 
  	$userOK = true;
 	$guestCount = 0;
@@ -64,11 +76,15 @@
 				{
 					$userOK = false;
 					$error = "Falsches Kennwort#1";
+//					$error = "Falsches Kennwort#1 " . $user['password'] . " " . mgMd5Hash($password) . " " . $password . " " . $source;
 				}
 			}
 
 			if( $userOK )
+			{
 				$actUser = $user;
+				setcookie( "password", $password, 0, "/" );
+			}
 		}
 		else if( isset( $email ) && $email )
 		{
@@ -155,6 +171,7 @@
 
 	if( !$userOK && !isset( $tryLogin) )
 	{
+		setcookie( "password", "", 0, "/" );
 		?>
 	
 			<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">

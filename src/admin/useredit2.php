@@ -9,8 +9,8 @@
 	$plz = $_POST["plz"];
 	$ort = $_POST["ort"];
 	$email = $_POST["uiemail"];
-	$password = $_POST["password"];
-	$password2 = $_POST["password2"];
+	$password = $_POST["uipassword"];
+	$password2 = $_POST["uipassword2"];
 		
 		
 	if( $id == 1 || $actUser['id'] == $id ) // root is allways an admin an the current user must not remove his own admin flag
@@ -74,6 +74,9 @@
 			"where id = $2",
 			array( mgMd5Hash($password), $id )
 		);
+		if( $id == $actUser['id'] )
+			setcookie( "password", $password );
+
 	}
 	if( is_object( $result ) )
 	{
