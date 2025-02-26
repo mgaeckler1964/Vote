@@ -11,6 +11,7 @@
 	$elections = getElections( $dbConnect, $vote_id );
 
 	$result = array();
+	$counter = array();
 	forEach( $elections as $election )
 	{
 		$elect_id = $election["elect_id"];
@@ -19,6 +20,12 @@
 		else
 			$row = array();
 		$option_id = $election["option_id"];
+
+		if( array_key_exists($option_id, $counter ) )
+			$counter[$option_id] = $counter[$option_id]+1;
+		else
+			$counter[$option_id] = 1;
+		
 		$row[$option_id] = $election["name"];
 		$result[$elect_id] = $row; 
 		
@@ -48,7 +55,7 @@
 		<?php
 			echo( "<tr>" );
 			forEach( $voteOptions as $voteOption )
-				echo( "<td>{$voteOption['text']}</td>" );
+				echo( "<th>{$voteOption['text']}</th>" );
 			echo( "</tr>" );
 			
 			forEach($result as $row)
@@ -64,6 +71,16 @@
 				}
 				echo( "</tr>" );
 			}
+			echo( "<tr>" );
+			forEach( $voteOptions as $voteOption )
+			{
+				$option_id = $voteOption["option_id"];
+				if( !array_key_exists($option_id, $counter ) )
+					$counter[$option_id] = 0;
+
+				echo( "<td>{$counter[$option_id]}</td>" );
+			}
+			echo( "</tr>" );
 		?>
 		</table>
 		<?php include( "includes/components/footerlines.php" ); ?>
