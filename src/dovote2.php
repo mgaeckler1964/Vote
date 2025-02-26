@@ -3,42 +3,46 @@
 	$vote_id = $_POST["vote_id"];
 	$name = $_POST['name'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
-		
+	$vote = getVote( $dbConnect, $vote_id );
+	$end_time = $vote['end_time'];
 
-	$elect_id = getNextID( $dbConnect, "elections", "elect_id" );
-	if( is_numeric( $elect_id ) )
+	if( $end_time > time() )
 	{
-		
-		forEach( $voteOptions as $voteOption )
+		$elect_id = getNextID( $dbConnect, "elections", "elect_id" );
+		if( is_numeric( $elect_id ) )
 		{
-			$option_id = $voteOption['option_id'];
-			$param = 'voteoption' . $option_id;
-
-			if( array_key_exists( $param, $_POST ) )
+			forEach( $voteOptions as $voteOption )
 			{
-				$option_id2 = $_POST[$param];
-				if( $option_id2 == $option_id )
+				$option_id = $voteOption['option_id'];
+				$param = 'voteoption' . $option_id;
+	
+				if( array_key_exists( $param, $_POST ) )
 				{
-					$queryResult = queryDatabase( 
-						$dbConnect, 
-						"insert into elections ".
-						"( elect_id, vote_id, name, option_id, the_time ) ".
-						"values ".
-						"( $1, $2, $3, $4, $5 )", 
-						array( $elect_id, $vote_id, $name, $option_id, time() )
-					);
-					if( !$queryResult || is_object($queryResult) )
+					$option_id2 = $_POST[$param];
+					if( $option_id2 == $option_id )
 					{
-						$error = $queryResult;
-						break;
+						$queryResult = queryDatabase( 
+							$dbConnect, 
+							"insert into elections ".
+							"( elect_id, vote_id, name, option_id, the_time ) ".
+							"values ".
+							"( $1, $2, $3, $4, $5 )", 
+							array( $elect_id, $vote_id, $name, $option_id, time() )
+						);
+						if( !$queryResult || is_object($queryResult) )
+						{
+							$error = $queryResult;
+							break;
+						}
 					}
 				}
 			}
 		}
+		else
+			$error = $elect_id;
 	}
 	else
-		$error = $elect_id;
-
+		$error = "Abstimmung abgelaufen";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
@@ -63,7 +67,7 @@
 			if( isset($error) )
 				include "includes/components/error.php";
 			else
-			echo( "Daten erfolgreich gespeichert." );
+				echo( "Daten erfolgreich gespeichert." );
 			
 		?>
 		<?php include( "includes/components/footerlines.php" ); ?>

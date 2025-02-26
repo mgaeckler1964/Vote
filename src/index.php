@@ -39,15 +39,22 @@
 		
 				while( $vote = fetchQueryRow( $queryResult ) )
 				{
+					$vote_id = $vote['vote_id'];
+					$end_time = $vote['end_time'];
+					if( $end_time >= time() )
+						$nextPage = "dovote.php";
+					else
+						$nextPage = "result.php";
+
 					echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 	
-					echo "<a href='dovote.php?vote_id={$vote['vote_id']}'>{$vote['name']}</a>";
+					echo "<a href='{$nextPage}?vote_id={$vote_id}'>{$vote['name']}</a>";
 					echo "</td>";
 					$start = formatTimeStamp($vote['start_time']);
-					$end = formatTimeStamp($vote['end_time']);
+					$end = formatTimeStamp($end_time);
 					echo "<td>{$start}</td>";
 					echo "<td>{$end}</td>";
-					echo "<td><a href='result.php?vote_id={$vote['vote_id']}' >Ergebniss</a></td>";
+					echo "<td><a href='result.php?vote_id={$vote_id}' >Ergebniss</a></td>";
 		
 					echo "</tr>\n";
 
