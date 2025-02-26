@@ -8,6 +8,7 @@
 	$startTime = $vote['start_time'];
 	$endTime = $vote['end_time'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
+	$election_count = getElectionCount( $dbConnect, $vote_id );
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -62,7 +63,7 @@
 				{
 					echo( "<tr><td>{$voteOption['text']}</td><td>" );
 					$option_id = $voteOption['option_id'];
-					if( isset($prev) )
+					if( $election_count == 0 && isset($prev) )
 					{
 						echo( "<a href='upVote.php?vote_id=${vote_id}&prev_id={$prev}&option_id=${option_id}'>Oben</a>&nbsp;" );
 					}

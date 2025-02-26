@@ -81,4 +81,25 @@
 
 		return $elections;
 	}
+	function getElectionCount( $dbConnect, $id )
+	{
+		$counter = 0;
+		$queryResult = queryDatabase(
+			$dbConnect,
+			"select count(*) as counter ".
+			"from elections ".
+			"where vote_id=$1",
+			array( $id )
+		);
+
+		if( $queryResult && !is_object( $queryResult ))
+		{
+			while( $queryRecord = fetchQueryRow( $queryResult ) )
+				$counter = $queryRecord['counter'];
+		}
+		else
+			$counter = $queryResult;
+
+		return $counter;
+	}
 ?>
