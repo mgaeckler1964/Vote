@@ -20,7 +20,7 @@
 
 		?>
 	</head>
-	<body class="center">
+	<body class="center" onLoad="document.getElementById('optionText').focus();">
 		<?php
 			include( "includes/components/headerlines.php" );
 		?>
@@ -59,12 +59,21 @@
 			{
 				echo( "<hr><table>" );
 				forEach( $voteOptions as $voteOption )
-					echo( "<tr><td>{$voteOption['text']}</td><td><a href='delFromVote.php?vote_id=${vote_id}&option_id=${voteOption['option_id']}'>Löschen</a></td></tr>" );
+				{
+					echo( "<tr><td>{$voteOption['text']}</td><td>" );
+					$option_id = $voteOption['option_id'];
+					if( isset($prev) )
+					{
+						echo( "<a href='upVote.php?vote_id=${vote_id}&prev_id={$prev}&option_id=${option_id}'>Oben</a>&nbsp;" );
+					}
+					$prev = $option_id;
+					echo( "<a href='delFromVote.php?vote_id={$vote_id}&option_id={$option_id}'>Löschen</a></td></tr>" );
+				}
 				echo( "</table>" );
 
 				echo( "<form name='addOptionForm' action='add2vote.php'>" );
 				echo( "<input type='hidden' name='vote_id' value='$vote_id'>" );
-				echo( "<input type='text' name='text' required>" );
+				echo( "<input type='text' name='text' id='optionText' required>" );
 				echo( "<input type='submit' value='Hinzuf&uuml;gen'>" );
 				echo( "</form>" );
 			}

@@ -23,7 +23,8 @@
 			$dbConnect,
 			"select vote_id, option_id, text ".
 			"from vote_options ".
-			"where vote_id=$1",
+			"where vote_id=$1 ".
+			"order by option_id",
 			array( $id )
 		);
 
@@ -36,6 +37,27 @@
 			$voteOptions = $queryResult;
 
 		return $voteOptions;
+	}
+
+	function getVoteOption( $dbConnect, $id )
+	{
+		$queryResult = queryDatabase(
+			$dbConnect,
+			"select vote_id, option_id, text ".
+			"from vote_options ".
+			"where option_id=$1",
+			array( $id )
+		);
+
+		if( $queryResult && !is_object( $queryResult ))
+		{
+			while( $queryRecord = fetchQueryRow( $queryResult ) )
+				$voteOption = $queryRecord;
+		}
+		else
+			$voteOption = $queryResult;
+
+		return $voteOption;
 	}
 
 	function getElections( $dbConnect, $id )
