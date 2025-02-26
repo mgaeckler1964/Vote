@@ -83,7 +83,8 @@
 			if( $userOK )
 			{
 				$actUser = $user;
-				setcookie( "password", $password, 0, "/" );
+				if( isset($password) )
+					setcookie( "password", $password, 0, "/" );
 			}
 		}
 		else if( isset( $email ) && $email )
