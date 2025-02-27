@@ -23,7 +23,7 @@
 				$dbConnect,
 				"select * ".
 				"from votes ".
-				"where start_time < $1 and (code <= '' or code is null)".
+				"where start_time < $1 ".
 				"order by start_time",
 				array( time() )
 			);
@@ -39,26 +39,31 @@
 		
 				while( $vote = fetchQueryRow( $queryResult ) )
 				{
-					$vote_id = $vote['vote_id'];
-					$end_time = $vote['end_time'];
-					if( $end_time >= time() )
-						$nextPage = "dovote.php";
-					else
-						$nextPage = "result.php";
+					$code = $vote['code'];
+					if( !$code )
+					{
+						$vote_id = $vote['vote_id'];
+						$end_time = $vote['end_time'];
 
-					echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
+						if( $end_time >= time() )
+							$nextPage = "dovote.php";
+						else
+							$nextPage = "result.php";
 	
-					echo "<a href='{$nextPage}?vote_id={$vote_id}'>{$vote['name']}</a>";
-					echo "</td>";
-					$start = formatTimeStamp($vote['start_time']);
-					$end = formatTimeStamp($end_time);
-					echo "<td>{$start}</td>";
-					echo "<td>{$end}</td>";
-					echo "<td><a href='result.php?vote_id={$vote_id}' >Ergebniss</a></td>";
+						echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 		
-					echo "</tr>\n";
-
-					$i++;
+						echo "<a href='{$nextPage}?vote_id={$vote_id}'>{$vote['name']}</a>";
+						echo "</td>";
+						$start = formatTimeStamp($vote['start_time']);
+						$end = formatTimeStamp($end_time);
+						echo "<td>{$start}</td>";
+						echo "<td>{$end}</td>";
+						echo "<td><a href='result.php?vote_id={$vote_id}' >Ergebniss</a></td>";
+			
+						echo "</tr>\n";
+	
+						$i++;
+					}
 				}
 				echo "</table>\n";
 			}

@@ -61,7 +61,7 @@
 			<table>
 				<tr>
 					<td class="fieldLabel">Name</td>
-					<td><input type="text" required="required" name="name" value="<?php echo htmlspecialchars($name); ?>"></td>
+					<td><input type="text" required="required" name="name" size=64 maxlength=255 value="<?php echo htmlspecialchars($name); ?>"></td>
 				</tr>
 				<tr>
 					<td class="fieldLabel">Abstimmcode</td>
@@ -69,7 +69,7 @@
 				</tr>
 				<tr>
 					<td class="fieldLabel">Frage</td>
-					<td><input type="text" required="required" name="question" value="<?php echo htmlspecialchars($question); ?>"></td>
+					<td><input type="text" required="required" name="question" size=64 maxlength=255 value="<?php echo htmlspecialchars($question); ?>"></td>
 				</tr>
 				<tr>
 					<td class="fieldLabel">Start</td>

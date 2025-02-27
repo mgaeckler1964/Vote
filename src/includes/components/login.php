@@ -142,7 +142,8 @@
 			else
 			{
 				setcookie( "userID", $user['id'], 0, "/" );
-				setcookie( "password", $password, 0, "/" );
+				if( isset($password) )
+					setcookie( "password", $password, 0, "/" );
 				$actUser = $user;
 				queryDatabase(
 					$dbConnect,

@@ -1,4 +1,5 @@
 <?php
+	$guest = "X";
 	require_once( "includes/components/login.php" ); 
 	$vote_id = $_POST["vote_id"];
 	$name = $_POST['name'];
