@@ -38,7 +38,9 @@
 						"name			varchar(255)	not null, ".
 						"question		varchar(255)	not null, ".
 						"start_time		int				not null, ".
-						"end_time		int				not null".
+						"end_time		int				not null, ".
+						"code			varchar(8), ".
+						"mode			int ".
 					")";
 				
 				$result = queryDatabase( $dbConnect, $query );

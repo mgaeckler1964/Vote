@@ -7,29 +7,42 @@
 	$question = $vote['question'];
 	$startTime = $vote['start_time'];
 	$endTime = $vote['end_time'];
-	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
-	$elections = getElections( $dbConnect, $vote_id );
+	$code = $vote['code'];
 
 	$result = array();
 	$counter = array();
-	forEach( $elections as $election )
+	
+	if( !$code || (array_key_exists("code", $_GET ) && $_GET['code'] == $code ) )
 	{
-		$elect_id = $election["elect_id"];
-		if( array_key_exists($elect_id, $result ) )
-			$row = $result[$elect_id];
-		else
-			$row = array();
-		$option_id = $election["option_id"];
+		$voteOptions = getVoteOptions( $dbConnect, $vote_id );
+		$elections = getElections( $dbConnect, $vote_id );
 
-		if( array_key_exists($option_id, $counter ) )
-			$counter[$option_id] = $counter[$option_id]+1;
-		else
-			$counter[$option_id] = 1;
-		
-		$row[$option_id] = $election["name"];
-		$result[$elect_id] = $row; 
-		
+		forEach( $elections as $election )
+		{
+			$elect_id = $election["elect_id"];
+			if( array_key_exists($elect_id, $result ) )
+				$row = $result[$elect_id];
+			else
+				$row = array();
+			$option_id = $election["option_id"];
+	
+			if( array_key_exists($option_id, $counter ) )
+				$counter[$option_id] = $counter[$option_id]+1;
+			else
+				$counter[$option_id] = 1;
+			
+			$row[$option_id] = $election["name"];
+			$result[$elect_id] = $row; 
+		}
 	}
+	else
+	{
+		$voteOptions = array();
+		$elections = array();
+		$name = "Falscher Code";
+		$question = "Nicht lesbar";
+	}
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 

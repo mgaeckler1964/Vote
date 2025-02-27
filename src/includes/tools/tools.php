@@ -4,7 +4,7 @@
 		$vote = array();
 		$queryResult = queryDatabase(
 			$dbConnect,
-			"select user_id, name, question, start_time, end_time ".
+			"select user_id, name, question, start_time, end_time, code, mode ".
 			"from votes ".
 			"where vote_id=$1",
 			array( $id )

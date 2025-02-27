@@ -23,7 +23,7 @@
 				$dbConnect,
 				"select * ".
 				"from votes ".
-				"where start_time < $1 ".
+				"where start_time < $1 and (code <= '' or code is null)".
 				"order by start_time",
 				array( time() )
 			);

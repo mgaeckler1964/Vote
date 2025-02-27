@@ -7,8 +7,22 @@
 	$question = $vote['question'];
 	$startTime = $vote['start_time'];
 	$endTime = $vote['end_time'];
+	$code = $vote['code'];
+	$mode = $vote['mode'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
 	$election_count = getElectionCount( $dbConnect, $vote_id );
+
+	if( $mode == 0 )
+	{
+		$multicheck = "checked";
+		$singlecheck = "";
+	}
+	else
+	{
+		$singlecheck = "checked";
+		$multicheck = "";
+	}
+	
 	$canWrite = true;
 	if( !$actUser['administrator'] )
 	{
@@ -17,6 +31,14 @@
 			$canWrite = false;
 		}
 	}
+	$voteUrl = "dovote.php?vote_id=".$vote_id;
+	$resultUrl = "result.php?vote_id=".$vote_id;
+	if( $code )
+	{
+		$voteUrl = $voteUrl  . "&code=".$code;
+		$resultUrl = $resultUrl . "&code=".$code;
+	}
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -42,6 +64,10 @@
 					<td><input type="text" required="required" name="name" value="<?php echo htmlspecialchars($name); ?>"></td>
 				</tr>
 				<tr>
+					<td class="fieldLabel">Abstimmcode</td>
+					<td><input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8></td>
+				</tr>
+				<tr>
 					<td class="fieldLabel">Frage</td>
 					<td><input type="text" required="required" name="question" value="<?php echo htmlspecialchars($question); ?>"></td>
 				</tr>
@@ -53,6 +79,19 @@
 					<td class="fieldLabel">Ende</td>
 					<td><input type="datetime-local" required="required" name="end_time" value="<?php echo htmlspecialchars(formatHtmlTimeStamp($endTime)); ?>"></td>
 				</tr>
+				<tr>
+					<th>Modus</th>
+					<td>
+						<input type="radio" name="mode" value="0" <?php echo($multicheck);?> >Mehrfachauswahl<br>
+						<input type="radio" name="mode" value="1" <?php echo($singlecheck);?> >Einfachauswahl<br>
+					</td>
+				</tr>
+				<tr>
+					<th>Urls</th>
+					<td>
+						<a href="<?php echo($voteUrl);?>" target="_blank">Abstimmen</a><br>
+						<a href="<?php echo($resultUrl);?>" target="_blank">Ergebniss</a>
+					</td>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>

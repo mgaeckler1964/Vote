@@ -4,37 +4,76 @@
 	$name = $_POST['name'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
 	$vote = getVote( $dbConnect, $vote_id );
-	$end_time = $vote['end_time'];
+	$startTime = $vote['start_time'];
+	$endTime = $vote['end_time'];
+	$code = $vote['code'];
+	$mode = $vote['mode'];
+	$canVote = true;
+	if($endTime < time())
+	{
+		$canVote = false;
+		$resaon = "Abstimmung abgelaufen";
+	}
+	else if($startTime > time())
+	{
+		$canVote = false;
+		$resaon = "Abstimmung noch nicht erlaubt";
+	}
+	else if( $code && (!array_key_exists("code", $_POST ) || $_POST['code'] != $code ) )
+	{
+		$canVote = false;
+		$reason = "Falscher Code";
+	}
 
-	if( $end_time > time() )
+
+	if( $canVote )
 	{
 		$elect_id = getNextID( $dbConnect, "elections", "elect_id" );
 		if( is_numeric( $elect_id ) )
 		{
-			forEach( $voteOptions as $voteOption )
+			if( $mode == 0 )
 			{
-				$option_id = $voteOption['option_id'];
-				$param = 'voteoption' . $option_id;
-	
-				if( array_key_exists( $param, $_POST ) )
+				forEach( $voteOptions as $voteOption )
 				{
-					$option_id2 = $_POST[$param];
-					if( $option_id2 == $option_id )
+					$option_id = $voteOption['option_id'];
+					$param = 'voteoption' . $option_id;
+		
+					if( array_key_exists( $param, $_POST ) )
 					{
-						$queryResult = queryDatabase( 
-							$dbConnect, 
-							"insert into elections ".
-							"( elect_id, vote_id, name, option_id, the_time ) ".
-							"values ".
-							"( $1, $2, $3, $4, $5 )", 
-							array( $elect_id, $vote_id, $name, $option_id, time() )
-						);
-						if( !$queryResult || is_object($queryResult) )
+						$option_id2 = $_POST[$param];
+						if( $option_id2 == $option_id )
 						{
-							$error = $queryResult;
-							break;
+							$queryResult = queryDatabase( 
+								$dbConnect, 
+								"insert into elections ".
+								"( elect_id, vote_id, name, option_id, the_time ) ".
+								"values ".
+								"( $1, $2, $3, $4, $5 )", 
+								array( $elect_id, $vote_id, $name, $option_id, time() )
+							);
+							if( !$queryResult || is_object($queryResult) )
+							{
+								$error = $queryResult;
+								break;
+							}
 						}
 					}
+				}
+			}
+			else
+			{
+				$option_id = $_POST["voteoption"];
+				$queryResult = queryDatabase( 
+					$dbConnect, 
+					"insert into elections ".
+					"( elect_id, vote_id, name, option_id, the_time ) ".
+					"values ".
+					"( $1, $2, $3, $4, $5 )", 
+					array( $elect_id, $vote_id, $name, $option_id, time() )
+				);
+				if( !$queryResult || is_object($queryResult) )
+				{
+					$error = $queryResult;
 				}
 			}
 		}
@@ -42,7 +81,7 @@
 			$error = $elect_id;
 	}
 	else
-		$error = "Abstimmung abgelaufen";
+		$error = $reason;
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">

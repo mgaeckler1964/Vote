@@ -8,6 +8,8 @@
 	$question = $_POST['question'];
 	$start_time = strtotime($_POST['start_time']);
 	$end_time = strtotime($_POST['end_time']);
+	$code = $_POST['code'];
+	$mode = $_POST['mode'];
 	$canWrite = true;
 
 	if( $vote_id )
@@ -29,10 +31,10 @@
 			$queryResult = queryDatabase( 
 				$dbConnect, 
 				"insert into votes ".
-				"( vote_id, user_id, name, question, start_time, end_time ) ".
+				"( vote_id, user_id, name, question, start_time, end_time, code, mode ) ".
 				"values ".
-				"( $1, $2, $3, $4, $5, $6 )", 
-				array( $vote_id, $actUser['id'], $name, $question, $start_time, $end_time )
+				"( $1, $2, $3, $4, $5, $6, $7, $8 )", 
+				array( $vote_id, $actUser['id'], $name, $question, $start_time, $end_time, $code, $mode )
 			);
 			$nextURL = "voteEdit.php?vote_id=" . $vote_id;
 		}
@@ -43,8 +45,8 @@
 	{
 		$queryResult = queryDatabase( 
 			$dbConnect, 
-			"update votes set name = $1, question=$2,  start_time=$3, end_time=$4 where vote_id = $5", 
-			array( $name, $question, $start_time, $end_time, $vote_id ) 
+			"update votes set name = $1, question=$2,  start_time=$3, end_time=$4, code = $5, mode = $6 where vote_id = $7", 
+			array( $name, $question, $start_time, $end_time, $code, $mode, $vote_id ) 
 		);
 		$nextURL = "index.php";
 	}

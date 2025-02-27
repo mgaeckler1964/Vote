@@ -20,6 +20,10 @@
 					<td><input type="text" name="name" required size=64 maxlength=255></td>
 				</tr>
 				<tr>
+					<th>Abstimmcode</th>
+					<td><input type="text" name="code" size=8 maxlength=8></td>
+				</tr>
+				<tr>
 					<th>Frage</th>
 					<td><input type="text" name="question" required size=64 maxlength=255></td>
 				</tr>
@@ -30,6 +34,13 @@
 				<tr>
 					<th>Ende</th>
 					<td><input type="datetime-local" name="end_time" required></td>
+				</tr>
+				<tr>
+					<th>Modus</th>
+					<td>
+						<input type="radio" name="mode" value="0" checked>Mehrfachauswahl<br>
+						<input type="radio" name="mode" value="1">Einfachauswahl<br>
+					</td>
 				</tr>
 				<tr>
 					<th></th>

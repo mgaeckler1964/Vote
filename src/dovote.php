@@ -7,7 +7,25 @@
 	$question = $vote['question'];
 	$startTime = $vote['start_time'];
 	$endTime = $vote['end_time'];
+	$code = $vote['code'];
+	$mode = $vote['mode'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
+	$canVote = true;
+	if($endTime < time())
+	{
+		$canVote = false;
+		$reason = "Abstimmung abgelaufen";
+	}
+	else if($startTime > time())
+	{
+		$canVote = false;
+		$reason = "Abstimmung noch nicht erlaubt";
+	}
+	else if( $code && (!array_key_exists("code", $_GET ) || $_GET['code'] != $code ) )
+	{
+		$canVote = false;
+		$reason = "Falscher Code";
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -27,10 +45,11 @@
 
 		<h2><?php echo htmlspecialchars($name); ?></h2>
 
-		<?php if( $endTime > time() ) { ?>
+		<?php if( $canVote ) { ?>
 		
 			<form action="dovote2.php" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="vote_id" value="<?php echo $vote_id;?>">
+				<input type="hidden" name="code" value="<?php echo $code;?>">
 				<table>
 					<tr>
 						<td class="fieldLabel">Name</td>
@@ -55,8 +74,15 @@
 						<td class="fieldLabel">&nbsp;</td>
 						<td><hr>
 							<?php
+								$checked = "checked";
 								forEach( $voteOptions as $voteOption )
-									echo( "<input type='checkbox' name='voteoption${voteOption['option_id']}' value='${voteOption['option_id']}' >{$voteOption['text']}<br>" );
+								{
+									if( $mode == 0 )
+										echo( "<input type='checkbox' name='voteoption${voteOption['option_id']}' value='${voteOption['option_id']}' >{$voteOption['text']}<br>" );
+									else
+										echo( "<input type='radio' {$checked} name='voteoption' value='${voteOption['option_id']}' >{$voteOption['text']}<br>" );
+									$checked = "";
+								}
 				
 							?>
 						<hr></td>
@@ -70,11 +96,9 @@
 					</tr>
 				</table>
 			</form>
-		<?php } else { ?>
-			<p>
-				Abstimmung abgelaufen.
-			</p>
-		<?php } ?>
+		<?php } else {
+			echo("<p>{$reason}</p>");
+		} ?>
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>
 </html>
