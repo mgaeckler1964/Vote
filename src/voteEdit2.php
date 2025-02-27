@@ -8,8 +8,19 @@
 	$question = $_POST['question'];
 	$start_time = strtotime($_POST['start_time']);
 	$end_time = strtotime($_POST['end_time']);
-		
-		
+	$canWrite = true;
+
+	if( $vote_id )
+	{
+		if( !$actUser['administrator'] )
+		{
+			$vote = getVote($dbConnect,$vote_id);
+			if( $vote["user_id"] != $actUser['id'] )
+			{
+				$canWrite = false;
+			}
+		}
+	}
 	if( !$vote_id )
 	{
 		$vote_id = getNextID( $dbConnect, "votes", "vote_id" );
@@ -28,7 +39,7 @@
 		else
 			$error = $vote_id;
 	}
-	else
+	else if( $canWrite )
 	{
 		$queryResult = queryDatabase( 
 			$dbConnect, 
@@ -37,6 +48,8 @@
 		);
 		$nextURL = "index.php";
 	}
+	else
+		$error = "Keine Berechtigung!";
 
 	if( !isset($error) )
 	{
@@ -64,7 +77,7 @@
 		<?php
 			include( "includes/components/headerlines.php" );
 
-			include "../includes/components/error.php";
+			include "includes/components/error.php";
 		?>
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>

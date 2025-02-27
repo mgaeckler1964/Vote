@@ -53,7 +53,16 @@
 					$end = formatTimeStamp($vote['end_time']);
 					echo "<td>{$start}</td>";
 					echo "<td>{$end}</td>";
-					echo "<td><a href='deleteVote.php?vote_id={$vote['vote_id']}' onClick='if( confirm( \"Wirklich?\" ) ) return true; else return false;'>Löschen</a></td>";
+					$canWrite = true;
+					if( !$actUser['administrator'] && $vote["user_id"] != $actUser['id'] )
+					{
+						$canWrite = false;
+					}
+								
+					if( $canWrite )
+					{
+						echo "<td><a href='deleteVote.php?vote_id={$vote['vote_id']}' onClick='if( confirm( \"Wirklich?\" ) ) return true; else return false;'>Löschen</a></td>";
+					}
 
 					echo "</tr>\n";
 				}

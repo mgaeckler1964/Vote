@@ -3,33 +3,48 @@
 	include_once( "includes/tools/commontools.php" ); 
 
 	$vote_id = $_GET["vote_id"];
+	$canWrite = true;
 
-	$queryResult = queryDatabase( 
-		$dbConnect,
-		"delete from vote_options ".
-		"where vote_id = $1",
-		array( $vote_id )
-	);
+	if( !$actUser['administrator'] )
+	{
+		$vote = getVote($dbConnect,$vote_id);
+		if( $vote["user_id"] != $actUser['id'] )
+		{
+			$canWrite = false;
+		}
+	}
 
-	if( isset( $queryResult ) && !is_object($queryResult) )
+	if( $canWrite )
 	{
 		$queryResult = queryDatabase( 
 			$dbConnect,
-			"delete from elections ".
+			"delete from vote_options ".
 			"where vote_id = $1",
 			array( $vote_id )
 		);
+	
+		if( isset( $queryResult ) && !is_object($queryResult) )
+		{
+			$queryResult = queryDatabase( 
+				$dbConnect,
+				"delete from elections ".
+				"where vote_id = $1",
+				array( $vote_id )
+			);
+		}
+	
+		if( isset( $queryResult ) && !is_object($queryResult) )
+		{
+			$queryResult = queryDatabase( 
+				$dbConnect,
+				"delete from votes ".
+				"where vote_id = $1",
+				array( $vote_id )
+			);
+		}
 	}
-
-	if( isset( $queryResult ) && !is_object($queryResult) )
-	{
-		$queryResult = queryDatabase( 
-			$dbConnect,
-			"delete from votes ".
-			"where vote_id = $1",
-			array( $vote_id )
-		);
-	}
+	else
+		$error = "Keine Berechtigung!";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
@@ -52,7 +67,7 @@
 		<?php
 			}
 			else
-				include "../includes/components/error.php";
+				include "includes/components/error.php";
 		?>
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>

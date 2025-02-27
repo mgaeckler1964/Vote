@@ -9,6 +9,14 @@
 	$endTime = $vote['end_time'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
 	$election_count = getElectionCount( $dbConnect, $vote_id );
+	$canWrite = true;
+	if( !$actUser['administrator'] )
+	{
+		if( $vote["user_id"] != $actUser['id'] )
+		{
+			$canWrite = false;
+		}
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -49,7 +57,10 @@
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>
 					<td>
-						<input type="submit" value="Speichern">
+						<?php if( $canWrite ) { ?>
+							<input type="submit" value="Speichern">
+						<?php } ?>
+
 						<input type='button' onClick="document.location.href='index.php'" value='Abbruch'>
 					</td>
 				</tr>
@@ -62,21 +73,33 @@
 				forEach( $voteOptions as $voteOption )
 				{
 					echo( "<tr><td>{$voteOption['text']}</td><td>" );
-					$option_id = $voteOption['option_id'];
-					if( $election_count == 0 && isset($prev) )
+					if( $canWrite )
 					{
-						echo( "<a href='upVote.php?vote_id=${vote_id}&prev_id={$prev}&option_id=${option_id}'>Oben</a>&nbsp;" );
+						$option_id = $voteOption['option_id'];
+						if( $election_count == 0 && isset($prev) )
+						{
+							echo( "<a href='upVote.php?vote_id=${vote_id}&prev_id={$prev}&option_id=${option_id}'>Oben</a>&nbsp;" );
+						}
+						$prev = $option_id;
+						echo( "<a href='delFromVote.php?vote_id={$vote_id}&option_id={$option_id}'>Löschen</a>");
 					}
-					$prev = $option_id;
-					echo( "<a href='delFromVote.php?vote_id={$vote_id}&option_id={$option_id}'>Löschen</a></td></tr>" );
+					else
+						echo("-");
+					echo( "</td></tr>" );
 				}
 				echo( "</table>" );
 
-				echo( "<form name='addOptionForm' action='add2vote.php'>" );
-				echo( "<input type='hidden' name='vote_id' value='$vote_id'>" );
-				echo( "<input type='text' name='text' id='optionText' required>" );
-				echo( "<input type='submit' value='Hinzuf&uuml;gen'>" );
-				echo( "</form>" );
+				if ($canWrite )
+				{
+					echo( "<form name='addOptionForm' action='add2vote.php'>" );
+					echo( "<input type='hidden' name='vote_id' value='$vote_id'>" );
+					echo( "<input type='text' name='text' id='optionText' required>" );
+					echo( "<input type='submit' value='Hinzuf&uuml;gen'>" );
+					echo( "</form>" );
+				}
+				else
+					echo( "<p>Speichern nicht erlaubt.</p>" );
+				
 			}
 		?>
 		<?php include( "includes/components/footerlines.php" ); ?>

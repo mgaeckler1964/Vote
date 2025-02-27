@@ -5,9 +5,29 @@
 	$vote_id = $_GET["vote_id"];
 	$option_id = $_GET["option_id"];
 	$prev_id = $_GET["prev_id"];
+	$canWrite = true;
 
-	$election_count = getElectionCount( $dbConnect, $vote_id );
-	if( $election_count == 0 )
+	if( !$actUser['administrator'] )
+	{
+		$vote = getVote($dbConnect,$vote_id);
+		if( $vote["user_id"] != $actUser['id'] )
+		{
+			$error = "Keine Berechtigung!";
+			$canWrite = false;
+		}
+	}
+
+	if( $canWrite )
+	{
+		$election_count = getElectionCount( $dbConnect, $vote_id );
+		if( $election_count > 0 )
+		{
+			$canWrite = false;
+			$error = "Es gibt schon Abstimmungen";
+		}
+	}
+
+	if( $canWrite )
 	{
 		$prevOption = getVoteOption( $dbConnect, $prev_id );
 		$thisOption = getVoteOption( $dbConnect, $option_id );
@@ -38,8 +58,6 @@
 			exit();
 		}
 	}
-	else
-		$error = "Es gibt schon Abstimmungen";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
