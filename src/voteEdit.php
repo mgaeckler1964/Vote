@@ -11,6 +11,9 @@
 	$mode = $vote['mode'];
 	$voteOptions = getVoteOptions( $dbConnect, $vote_id );
 	$election_count = getElectionCount( $dbConnect, $vote_id );
+	$user_id = $vote['user_id'];
+	$user = getUser( $dbConnect, $user_id );
+	$fullname = $user['fullname'];
 
 	if( $mode == 0 )
 	{
@@ -65,7 +68,11 @@
 				</tr>
 				<tr>
 					<td class="fieldLabel">Abstimmcode</td>
-					<td><input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8></td>
+					<td>
+						<input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8>
+						Mit Abstimmcode erscheint die Abstimmung nicht bei den aktiven Abstimmungen und die Stimmabgabe und 
+						Ergebnisanzeige erfolgt nur &uuml;ber die URLs unten.
+					</td>
 				</tr>
 				<tr>
 					<td class="fieldLabel">Frage</td>
@@ -92,6 +99,7 @@
 						<a href="<?php echo($voteUrl);?>" target="_blank">Abstimmen</a><br>
 						<a href="<?php echo($resultUrl);?>" target="_blank">Ergebniss</a>
 					</td>
+				<tr><td class="fieldLabel">Ersteller</td><td><?php echo htmlspecialchars($fullname); ?></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>
