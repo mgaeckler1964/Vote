@@ -27,6 +27,11 @@
 		$canVote = false;
 		$reason = VOTE_CODE;
 	}
+	if( array_key_exists( "vote_name", $_COOKIE ) )
+		$vote_name = $_COOKIE["vote_name"];
+	else
+		$vote_name = "";
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -55,7 +60,7 @@
 					<tr>
 						<td class="fieldLabel">Name</td>
 						<td>
-							<input type="text" name="name" required>
+							<input type="text" name="name" required value="<?php echo($vote_name); ?>">
 						</td>
 					</tr>
 					<tr>

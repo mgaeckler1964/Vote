@@ -28,9 +28,29 @@
 
 	if( $canVote )
 	{
-		$elect_id = getNextID( $dbConnect, "elections", "elect_id" );
+		$cookieName = "vote".$vote_id;
+		if( array_key_exists( $cookieName, $_COOKIE ) )
+		{
+			$elect_id = $_COOKIE[$cookieName];
+			$queryResult = queryDatabase( 
+				$dbConnect, 
+				"delete from elections ".
+				"where elect_id = $1 and vote_id = $2",
+				array( $elect_id, $vote_id )
+			);
+		}
+		else
+		{
+			$elect_id = getNextID( $dbConnect, "elections", "elect_id" );
+			if( is_numeric( $elect_id ) )
+			{
+				setcookie( $cookieName, $elect_id, 0, "/" );
+			}
+		}
+		
 		if( is_numeric( $elect_id ) )
 		{
+			setcookie( "vote_name", $name, 0, "/" );
 			if( $mode == 0 )
 			{
 				forEach( $voteOptions as $voteOption )
