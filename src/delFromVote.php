@@ -31,7 +31,7 @@
 		}
 	}
 	else
-		$error = "Keine Berechtigung!";
+		$error = NO_PERM;
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">

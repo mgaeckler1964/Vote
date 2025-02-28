@@ -12,7 +12,7 @@
 		$vote = getVote($dbConnect,$vote_id);
 		if( $vote["user_id"] != $actUser['id'] )
 		{
-			$error = "Keine Berechtigung!";
+			$error = NO_PERM;
 			$canWrite = false;
 		}
 	}

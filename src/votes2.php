@@ -72,7 +72,7 @@
 			echo "<p class='pager'>";
 			if( $page )
 				echo "<a href='javascript:prevPage();'>&lt;&lt;</a> ";
-			echo "Seite " .($page+1). " von " . floor(($i-1)/$hitsPerPage+1) . ". - $i Votes gefunden. ";
+			echo "Seite " .($page+1). " von " . floor(($i-1)/$hitsPerPage+1) . ". - $i Abstimmung(en) gefunden. ";
 			if( ($page+1) <= floor(($i-1)/$hitsPerPage) )
 				echo "<a href='javascript:nextPage();'>&gt;&gt;</a>";
 			echo "</p>\n";

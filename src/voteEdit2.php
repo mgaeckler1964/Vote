@@ -51,7 +51,7 @@
 		$nextURL = "index.php";
 	}
 	else
-		$error = "Keine Berechtigung!";
+		$error = NO_PERM;
 
 	if( !isset($error) )
 	{

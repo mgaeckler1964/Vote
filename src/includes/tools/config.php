@@ -38,6 +38,11 @@
 	*/
 	define( "APPLICATION_NAME", "Abstimmungen" );
 	define( "APPLICATION_COPYRIGHT", "&copy; 2025 by <a href='http://www.gaeckler.at/' target='_blank'>Martin G&auml;ckler</a>" );
+	define( "NO_PERM", "Keine Berechtigung" );
+	define( "VOTE_EXPIRED", "Abstimmung abgelaufen" );
+	define( "VOTE_WAITING", "Abstimmung noch nicht erlaubt" );
+	define( "VOTE_CODE", "Falscher Code" );
+  
 	
 	$backupTables = array( "user_tab", "group_member", "user_login_prot", "strassen", "terminals", "adressen" );
 	

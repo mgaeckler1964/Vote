@@ -2,7 +2,7 @@
 	include "../includes/components/login.php";
 	if( !$actUser['administrator'] )
 	{
-		echo( "Keine Berechtigung" );
+		echo( NO_PERM );
 		exit;
 	}
 ?>

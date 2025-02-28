@@ -15,17 +15,17 @@
 	if($endTime < time())
 	{
 		$canVote = false;
-		$reason = "Abstimmung abgelaufen";
+		$reason = VOTE_EXPIRED;
 	}
 	else if($startTime > time())
 	{
 		$canVote = false;
-		$reason = "Abstimmung noch nicht erlaubt";
+		$reason = VOTE_WAITING;
 	}
 	else if( $code && (!array_key_exists("code", $_GET ) || $_GET['code'] != $code ) )
 	{
 		$canVote = false;
-		$reason = "Falscher Code";
+		$reason = VOTE_CODE;
 	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">

@@ -7,9 +7,9 @@
 ?>
 <hr style="clear:right;">
 <div class="Menu"><div class="MenuLeftEntry">
-	<a href="index.php">Home</a>
+	<a href="index.php">Start</a>
 </div><div class="MenuLeftEntry">
-	<a href="votes.php">Votes</a>
+	<a href="votes.php">Abstimmungen</a>
 </div><div class="MenuLeftEntry">
 	<a href="new.php">Neu</a>
 </div><div class="MenuLeftEntry">
@@ -17,7 +17,7 @@
 </div>
 <?php if( isset( $actUser ) ) { ?>
 	<div class="MenuRightEntry">
-		<a href="logout.php">Logout</a>
+		<a href="logout.php">Abmelden</a>
 	</div>
 <?php } ?>
 <?php if( isset( $actUser ) && !$actUser['guest'] ) { ?>
