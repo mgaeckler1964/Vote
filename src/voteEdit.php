@@ -66,14 +66,16 @@
 					<td class="fieldLabel">Name</td>
 					<td><input type="text" required="required" name="name" size=64 maxlength=255 value="<?php echo htmlspecialchars($name); ?>"></td>
 				</tr>
-				<tr>
-					<td class="fieldLabel">Abstimmcode</td>
-					<td>
-						<input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8>
-						Mit Abstimmcode erscheint die Abstimmung nicht bei den aktiven Abstimmungen und die Stimmabgabe und 
-						Ergebnisanzeige erfolgt nur &uuml;ber die URLs unten.
-					</td>
-				</tr>
+				<?php if( $canWrite ) { ?>
+					<tr>
+						<td class="fieldLabel">Abstimmcode</td>
+						<td>
+							<input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8>
+							Mit Abstimmcode erscheint die Abstimmung nicht bei den aktiven Abstimmungen. 
+							Die Stimmabgabe und Ergebnisanzeige erfolgt nur &uuml;ber die URLs unten.
+						</td>
+					</tr>
+				<?php } ?>
 				<tr>
 					<td class="fieldLabel">Frage</td>
 					<td><input type="text" required="required" name="question" size=64 maxlength=255 value="<?php echo htmlspecialchars($question); ?>"></td>
@@ -93,12 +95,15 @@
 						<input type="radio" name="mode" value="1" <?php echo($singlecheck);?> >Einfachauswahl<br>
 					</td>
 				</tr>
-				<tr>
-					<th>Urls</th>
-					<td>
-						<a href="<?php echo($voteUrl);?>" target="_blank">Abstimmen</a><br>
-						<a href="<?php echo($resultUrl);?>" target="_blank">Ergebniss</a>
-					</td>
+				<?php if( $canWrite ) { ?>
+					<tr>
+						<th>Urls</th>
+						<td>
+							<a href="<?php echo($voteUrl);?>" target="_blank">Abstimmen</a><br>
+							<a href="<?php echo($resultUrl);?>" target="_blank">Ergebniss</a>
+						</td>
+					</tr>
+				<?php } ?>
 				<tr><td class="fieldLabel">Ersteller</td><td><?php echo htmlspecialchars($fullname); ?></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
