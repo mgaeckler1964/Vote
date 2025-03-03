@@ -126,7 +126,13 @@
 			if( isset($error) )
 				include "includes/components/error.php";
 			else
+			{
 				echo( "Daten erfolgreich gespeichert." );
+				$resultUrl = "result.php?vote_id=".$vote_id;
+				if( $code )
+					$resultUrl = $resultUrl . "&code=" . $code;
+				echo( '<p><a href="' . $resultUrl . '">Ergebniss</a></p>');
+			}
 			
 		?>
 		<?php include( "includes/components/footerlines.php" ); ?>

@@ -9,6 +9,19 @@
 	$startTime = $vote['start_time'];
 	$endTime = $vote['end_time'];
 	$code = $vote['code'];
+	$canVote = true;
+	if($endTime < time())
+	{
+		$canVote = false;
+	}
+	else if($startTime > time())
+	{
+		$canVote = false;
+	}
+	else if( $code && (!array_key_exists("code", $_GET ) || $_GET['code'] != $code ) )
+	{
+		$canVote = false;
+	}
 
 	$result = array();
 	$counter = array();
@@ -97,6 +110,17 @@
 			echo( "</tr>" );
 		?>
 		</table>
+		<?php
+			if( $canVote )
+			{
+				$doVoteUrl = "dovote.php?vote_id=".$vote_id;
+				if( $code )
+					$doVoteUrl = $doVoteUrl . "&code=" . $code;
+				echo( '<p><a href="' . $doVoteUrl . '">Abstimmen</a></p>');
+			
+			}
+		?>
+
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>
 </html>
