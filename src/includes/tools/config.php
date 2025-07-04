@@ -11,7 +11,7 @@
 	
 	
 	/*
-		connect strings für die datenbank:
+		connect strings for the databases:
 	*/
 
 	$postgresDB		= "dbname=xxxxx user=xxxxx password=xxxxx";
@@ -23,6 +23,15 @@
 	$oraPassword	= "xxxxx";
 	$oraConnection	= "xxxxx";
 
+	/*
+		Mailer config
+	*/
+	$useNewMailer=false;
+//	define( "MAILER_PATH", "xxx/" );
+//	define( "MAILER_URL", "http://xxx/?file=yyy&nextUrl=zzz" );
+//	define( "MAILER_FROM", "xxx@xxx.xx" );
+//	define( "MAILER_NEXTURL", "https://xxx.xx/xxx" );
+
 	$serverName = $_SERVER["SERVER_NAME"];
 
 	$config = "includes/tools/config." . $serverName . ".php";
@@ -32,7 +41,6 @@
 	$config = "../includes/tools/config." . $serverName . ".php";
 	if( is_file( $config ) )
 		include_once( $config );
-		
 	/*
 		application specific constants
 	*/
@@ -42,9 +50,8 @@
 	define( "VOTE_EXPIRED", "Abstimmung abgelaufen" );
 	define( "VOTE_WAITING", "Abstimmung noch nicht erlaubt" );
 	define( "VOTE_CODE", "Falscher Code" );
-  
-	
+
 	$backupTables = array( "user_tab", "group_member", "user_login_prot", "strassen", "terminals", "adressen" );
-	
+
 	date_default_timezone_set('Europe/Vienna');
 ?>
