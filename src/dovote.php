@@ -49,7 +49,7 @@
 			include( "includes/components/headerlines.php" );
 		?>
 
-		<h2><?php echo htmlspecialchars($name); ?></h2>
+		<h2><?php echo htmlspecialchars($name, ENT_QUOTES, 'ISO-8859-1'); ?></h2>
 
 		<?php if( $canVote ) { ?>
 		
@@ -65,7 +65,7 @@
 					</tr>
 					<tr>
 						<td class="fieldLabel">Frage</td>
-						<td><?php echo htmlspecialchars($question); ?></td>
+						<td><?php echo htmlspecialchars($question, ENT_QUOTES, 'ISO-8859-1'); ?></td>
 					</tr>
 					<tr>
 						<td class="fieldLabel">Start</td>

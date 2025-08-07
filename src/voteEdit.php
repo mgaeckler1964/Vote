@@ -64,7 +64,7 @@
 			<table>
 				<tr>
 					<td class="fieldLabel">Name</td>
-					<td><input type="text" required="required" name="name" size=64 maxlength=255 value="<?php echo htmlspecialchars($name); ?>"></td>
+					<td><input type="text" required="required" name="name" size=64 maxlength=255 value="<?php echo htmlspecialchars($name, ENT_QUOTES, 'ISO-8859-1'); ?>"></td>
 				</tr>
 				<?php if( $canWrite ) { ?>
 					<tr>
@@ -78,7 +78,8 @@
 				<?php } ?>
 				<tr>
 					<td class="fieldLabel">Frage</td>
-					<td><input type="text" required="required" name="question" size=64 maxlength=255 value="<?php echo htmlspecialchars($question); ?>"></td>
+					<td><input type="text" required="required" name="question" size=64 maxlength=255 
+					value="<?php echo htmlspecialchars($question, ENT_QUOTES, 'ISO-8859-1'); ?>"></td>
 				</tr>
 				<tr>
 					<td class="fieldLabel">Start</td>
@@ -104,7 +105,7 @@
 						</td>
 					</tr>
 				<?php } ?>
-				<tr><td class="fieldLabel">Ersteller</td><td><?php echo htmlspecialchars($fullname); ?></td></tr>
+				<tr><td class="fieldLabel">Ersteller</td><td><?php echo htmlspecialchars($fullname, ENT_QUOTES, 'ISO-8859-1'); ?></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>

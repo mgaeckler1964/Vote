@@ -10,7 +10,10 @@
 			array( $id )
 		);
 		if( $queryResult && !is_object( $queryResult ) )
+		{
 			$vote = fetchQueryRow( $queryResult );
+			$vote["question"] = urldecode($vote["question"]);
+		}
 		
 		
 		return $vote;
@@ -31,7 +34,10 @@
 		if( $queryResult && !is_object( $queryResult ))
 		{
 			while( $queryRecord = fetchQueryRow( $queryResult ) )
+			{
+				$queryRecord["text"] = urldecode($queryRecord["text"]);
 				$voteOptions[] = $queryRecord;
+			}
 		}
 		else
 			$voteOptions = $queryResult;
@@ -53,6 +59,8 @@
 		{
 			while( $queryRecord = fetchQueryRow( $queryResult ) )
 				$voteOption = $queryRecord;
+
+			$voteOption["text"] = urldecode($voteOption["text"]);
 		}
 		else
 			$voteOption = $queryResult;
@@ -74,7 +82,10 @@
 		if( $queryResult && !is_object( $queryResult ))
 		{
 			while( $queryRecord = fetchQueryRow( $queryResult ) )
+			{
+				$queryRecord["name"] = urldecode($queryRecord["name"]);
 				$elections[] = $queryRecord;
+			}
 		}
 		else
 			$elections = $queryResult;

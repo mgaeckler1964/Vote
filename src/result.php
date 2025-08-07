@@ -74,8 +74,8 @@
 			include( "includes/components/headerlines.php" );
 		?>
 
-		<h2><?php echo htmlspecialchars($name); ?></h2>
-		<h3><?php echo htmlspecialchars($question); ?></h3>
+		<h2><?php echo htmlspecialchars($name, ENT_QUOTES, 'ISO-8859-1'); ?></h2>
+		<h3><?php echo htmlspecialchars($question, ENT_QUOTES, 'ISO-8859-1'); ?></h3>
 
 		<hr><table>
 

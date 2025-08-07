@@ -69,8 +69,9 @@
 								"( elect_id, vote_id, name, option_id, the_time ) ".
 								"values ".
 								"( $1, $2, $3, $4, $5 )", 
-								array( $elect_id, $vote_id, $name, $option_id, time() )
+								array( $elect_id, $vote_id, urlencode($name), $option_id, time() )
 							);
+							print_r($name);
 							if( !$queryResult || is_object($queryResult) )
 							{
 								$error = $queryResult;
@@ -89,7 +90,7 @@
 					"( elect_id, vote_id, name, option_id, the_time ) ".
 					"values ".
 					"( $1, $2, $3, $4, $5 )", 
-					array( $elect_id, $vote_id, $name, $option_id, time() )
+					array( $elect_id, $vote_id, urlencode($name), $option_id, time() )
 				);
 				if( !$queryResult || is_object($queryResult) )
 				{

@@ -26,7 +26,7 @@
 			"(option_id, vote_id, text) ".
 			"values ".
 			"($1, $2, $3 )",
-			array( $option_id, $vote_id, $text )
+			array( $option_id, $vote_id, urlencode($text) )
 		);
 	
 		if( isset( $queryResult ) && !is_object($queryResult) )
