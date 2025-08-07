@@ -44,16 +44,16 @@
 		<form action="useredit2.php" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="<?php echo $id;?>">
 			<table>
-				<tr><td class="fieldLabel">Name</td><td><input type="text" name="nachname" value="<?php echo htmlspecialchars($nachname); ?>"></td></tr>
-				<tr><td class="fieldLabel">Vorname</td><td><input type="text" name="vorname" value="<?php echo htmlspecialchars($vorname); ?>"></td></tr>
-				<tr><td class="fieldLabel">Anschrift</td><td><input type="text" name="strasse" value="<?php echo htmlspecialchars($strasse); ?>"></td></tr>
-				<tr><td class="fieldLabel">Postfach</td><td><input type="text" name="postfach" value="<?php echo htmlspecialchars($postfach); ?>"></td></tr>
+				<tr><td class="fieldLabel">Name</td><td><input type="text" name="nachname" value="<?php echo htmlspecialchars($nachname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">Vorname</td><td><input type="text" name="vorname" value="<?php echo htmlspecialchars($vorname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">Anschrift</td><td><input type="text" name="strasse" value="<?php echo htmlspecialchars($strasse, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">Postfach</td><td><input type="text" name="postfach" value="<?php echo htmlspecialchars($postfach, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">Land-PLZ Ort</td><td>
-					<input type=text" name="land" value="<?php echo htmlspecialchars($land); ?>">
-					<input type=text" name="plz" value="<?php echo htmlspecialchars($plz); ?>">
-					<input type=text" name="ort" value="<?php echo htmlspecialchars($ort); ?>">
+					<input type=text" name="land" value="<?php echo htmlspecialchars($land, ENT_QUOTES, 'ISO-8859-1'); ?>">
+					<input type=text" name="plz" value="<?php echo htmlspecialchars($plz, ENT_QUOTES, 'ISO-8859-1'); ?>">
+					<input type=text" name="ort" value="<?php echo htmlspecialchars($ort, ENT_QUOTES, 'ISO-8859-1'); ?>">
 				</td></tr>
-				<tr><td class="fieldLabel">E-Mail</td><td><input type="email" required="required" name="uiemail" value="<?php echo htmlspecialchars($email); ?>"></td></tr>
+				<tr><td class="fieldLabel">E-Mail</td><td><input type="email" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">Passwort</td><td><input type="password" name="uipassword"></td></tr>
 				<tr><td class="fieldLabel">Passwort (Wdh)</td><td><input type="password" name="uipassword2"></td></tr>
 				<tr><td class="fieldLabel">Administrator</td><td><input type="checkbox" name="administrator" value="X"

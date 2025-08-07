@@ -33,7 +33,8 @@
 				"$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12" .
 			")",
 			array( 
-				$id, $nachname, $vorname, $strasse, $postfach, $land, $plz, $ort, $email, $administrator, $guest, $loginenabled
+				$id, urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
+				urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled
 			)
 		);
 	}
@@ -54,8 +55,8 @@
 				"loginenabled = $11 " .
 			"where id = $12",
 			array( 
-				$nachname, $vorname, $strasse, $postfach, $land, $plz, $ort,
-				$email, $administrator, $guest, $loginenabled,
+				urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
+				urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled,
 				$id 
 			)
 		);

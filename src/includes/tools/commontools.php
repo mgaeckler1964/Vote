@@ -93,6 +93,15 @@
 		$user = fetchQueryRow( $queryResult );
 		if( $user )
 		{
+			$user['nachname'] = urldecode($user['nachname']);
+			$user['vorname'] = urldecode($user['vorname']);
+			$user['strasse'] = urldecode($user['strasse']);
+			$user['postfach'] = urldecode($user['postfach']);
+			$user['land'] = urldecode($user['land']);
+			$user['plz'] = urldecode($user['plz']);
+			$user['ort'] = urldecode($user['ort']);
+			$user['email'] = urldecode($user['email']);
+			
 			if( $user['nachname'] )
 				$user['fullname']=$user['nachname'];
 			else
@@ -120,7 +129,7 @@
 		
 		return $user;
 	}
-	function getUser( $dbConnect, $id, $email=null )
+	function getUser2( $dbConnect, $id, $email=null )
 	{
 		if( !$email )
 			$email = "__dummyMailNeverUsed__";
@@ -139,6 +148,15 @@
 		if( $queryResult && !is_object( $queryResult ) )
 			$user = fetchUser( $queryResult );
 		
+		
+		return $user;
+	}
+	function getUser( $dbConnect, $id, $email=null )
+	{
+		$user = getUser2( $dbConnect, $id, $email );
+		if( !array_key_exists( "loginenabled", $user ) ) {
+			$user = getUser2( $dbConnect, $id, urlencode($email) );
+		}
 		
 		return $user;
 	}
