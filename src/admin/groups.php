@@ -63,7 +63,7 @@
 
 		<form name="searchForm" action="groups.php" method="post">
 			<table>
-				<tr><td class="fieldLabel">Name</td><td><input type="text" name="groupName" value="<?php if( isset( $groupName ) ) echo $groupName; ?>"></td></tr>
+				<tr><td class="fieldLabel">Name</td><td><input type="text" name="groupName" value="<?php if( isset( $groupName ) ) echo htmlspecialchars($groupName, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel"></td>

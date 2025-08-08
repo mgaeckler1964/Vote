@@ -4,8 +4,8 @@
 	if( array_key_exists("vote_id", $_POST) )
 		$vote_id = $_POST["vote_id"];
 
-	$name = $_POST['name'];
-	$question = $_POST['question'];
+	$name = urlencode($_POST['name']);
+	$question = urlencode($_POST['question']);
 	$start_time = strtotime($_POST['start_time']);
 	$end_time = strtotime($_POST['end_time']);
 	$code = $_POST['code'];
@@ -34,7 +34,7 @@
 				"( vote_id, user_id, name, question, start_time, end_time, code, mode ) ".
 				"values ".
 				"( $1, $2, $3, $4, $5, $6, $7, $8 )", 
-				array( $vote_id, $actUser['id'], $name, urlencode($question), $start_time, $end_time, $code, $mode )
+				array( $vote_id, $actUser['id'], $name, $question, $start_time, $end_time, $code, $mode )
 			);
 			$nextURL = "voteEdit.php?vote_id=" . $vote_id;
 		}
@@ -46,7 +46,7 @@
 		$queryResult = queryDatabase( 
 			$dbConnect, 
 			"update votes set name = $1, question=$2,  start_time=$3, end_time=$4, code = $5, mode = $6 where vote_id = $7", 
-			array( $name, urlencode($question), $start_time, $end_time, $code, $mode, $vote_id ) 
+			array( $name, $question, $start_time, $end_time, $code, $mode, $vote_id ) 
 		);
 		$nextURL = "index.php";
 	}

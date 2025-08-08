@@ -12,6 +12,7 @@
 		if( $queryResult && !is_object( $queryResult ) )
 		{
 			$vote = fetchQueryRow( $queryResult );
+			$vote["name"] = urldecode($vote["name"]);
 			$vote["question"] = urldecode($vote["question"]);
 		}
 		

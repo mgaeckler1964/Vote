@@ -30,7 +30,7 @@
 			"where upper(nachname) like upper($1) ".
 			"and is_group is null ".
 			"order by nachname, vorname",
-			array( $userName."%" )
+			array( urlencode($userName)."%" )
 		);
 		if( isset( $queryResult ) && !is_object($queryResult) )
 		{
@@ -47,9 +47,9 @@
 				{
 					echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 
-					echo "<a href='useredit.php?id={$user['id']}'>{$user['fullname']}</a>";
+					echo "<a href='useredit.php?id={$user['id']}'>". htmlspecialchars($user['fullname'], ENT_QUOTES, 'ISO-8859-1') ."</a>";
 					echo "</td>";
-					echo "<td>{$user['email']}</td>";
+					echo "<td>". htmlspecialchars($user['email'], ENT_QUOTES, 'ISO-8859-1') ."</td>";
 					echo "<td>{$user['lastlogin']}</td>";
 						
 					if( $user['id'] != 1 )

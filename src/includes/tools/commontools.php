@@ -252,8 +252,10 @@
 		if( $queryResult && !is_object( $queryResult ))
 		{
 			$userTab = array();
-			while( $queryRecord = fetchQueryRow( $queryResult ) )
+			while( $queryRecord = fetchQueryRow( $queryResult ) ) {
+				$queryRecord["email"] = urldecode($queryRecord["email"]);
 				$userTab[] = $queryRecord;
+			}
 		}
 		else
 			$userTab = $queryResult;
@@ -293,8 +295,10 @@
 		if( $queryResult && !is_object( $queryResult ))
 		{
 			$groupMembers = array();
-			while( $queryRecord = fetchQueryRow( $queryResult ) )
+			while( $queryRecord = fetchQueryRow( $queryResult ) ) {
+				$queryRecord["email"] = urldecode($queryRecord["email"]);
 				$groupMembers[] = $queryRecord;
+			}
 		}
 		else
 			$groupMembers = $queryResult;

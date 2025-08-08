@@ -34,7 +34,7 @@
 		<form action="groupedit2.php" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="<?php echo $id;?>">
 			<table>
-				<tr><td class="fieldLabel">Name</td><td><input type="text" required="required" name="uiemail" value="<?php echo htmlspecialchars($email); ?>"></td></tr>
+				<tr><td class="fieldLabel">Name</td><td><input type="text" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>
@@ -52,7 +52,7 @@
 			{
 				echo( "<hr><table>" );
 				forEach( $groupMembers as $theMember )
-					echo( "<tr><td>{$theMember['email']}</td><td><a href='delFromGroup.php?id=$id&oldUserId={$theMember['id']}'>Löschen</a></td></tr>" );
+					echo( "<tr><td>" . htmlspecialchars($theMember['email'], ENT_QUOTES, 'ISO-8859-1') . "</td><td><a href='delFromGroup.php?id=$id&oldUserId={$theMember['id']}'>Löschen</a></td></tr>" );
 				echo( "</table>" );
 
 				echo( "<form name='addUserForm' action='add2group.php'>" );

@@ -29,7 +29,7 @@
 			"from votes ".
 			"where upper(name) like upper($1) ".
 			"order by name",
-			array( $voteName."%" )
+			array( urlencode($voteName)."%" )
 		);
 		if( isset( $queryResult ) && !is_object($queryResult) )
 		{
@@ -47,7 +47,7 @@
 				{
 					echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 
-					echo "<a href='voteEdit.php?vote_id={$vote['vote_id']}'>{$vote['name']}</a>";
+					echo "<a href='voteEdit.php?vote_id={$vote['vote_id']}'>". htmlspecialchars(urldecode($vote['name']), ENT_QUOTES, 'ISO-8859-1') ."</a>";
 					echo "</td>";
 					$start = formatTimeStamp($vote['start_time']);
 					$end = formatTimeStamp($vote['end_time']);

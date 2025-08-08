@@ -52,7 +52,7 @@
 	
 						echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 		
-						echo "<a href='{$nextPage}?vote_id={$vote_id}'>{$vote['name']}</a>";
+						echo "<a href='{$nextPage}?vote_id={$vote_id}'>". htmlspecialchars(urldecode($vote['name']), ENT_QUOTES, 'ISO-8859-1') ."</a>";
 						echo "</td>";
 						$start = formatTimeStamp($vote['start_time']);
 						$end = formatTimeStamp($end_time);

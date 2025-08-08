@@ -45,7 +45,7 @@
 				{
 					echo "<tr class=\"".($i%2?"even":"odd")."\"><td>".($i+1)."</td><td>";
 
-					echo "<a href='groupedit.php?id={$group['id']}'>{$group['email']}</a>";
+					echo "<a href='groupedit.php?id={$group['id']}'>" . htmlspecialchars(urldecode($group['email']), ENT_QUOTES, 'ISO-8859-1') . "</a>";
 					echo "</td>";
 						
 					echo "<td><a href='deleteUser.php?id={$group['id']}' onClick='if( confirm( \"Wirklich?\" ) ) return true; else return false;'>Löschen</a></td>";

@@ -70,7 +70,7 @@
 					<tr>
 						<td class="fieldLabel">Abstimmcode</td>
 						<td>
-							<input type="text" name="code" value="<?php echo htmlspecialchars($code); ?>"  size=8 maxlength=8>
+							<input type="text" name="code" value="<?php echo htmlspecialchars($code, ENT_QUOTES, 'ISO-8859-1'); ?>"  size=8 maxlength=8>
 							Mit Abstimmcode erscheint die Abstimmung nicht bei den aktiven Abstimmungen. 
 							Die Stimmabgabe und Ergebnisanzeige erfolgt nur &uuml;ber die URLs unten.
 						</td>
@@ -125,7 +125,7 @@
 				echo( "<hr><table>" );
 				forEach( $voteOptions as $voteOption )
 				{
-					echo( "<tr><td>{$voteOption['text']}</td><td>" );
+					echo( "<tr><td>". htmlspecialchars($voteOption['text'], ENT_QUOTES, 'ISO-8859-1') ."</td><td>" );
 					if( $canWrite )
 					{
 						$option_id = $voteOption['option_id'];

@@ -82,7 +82,7 @@
 		<?php
 			echo( "<tr>" );
 			forEach( $voteOptions as $voteOption )
-				echo( "<th>{$voteOption['text']}</th>" );
+				echo( "<th>". htmlspecialchars($voteOption['text'], ENT_QUOTES, 'ISO-8859-1') ."</th>" );
 			echo( "</tr>" );
 			
 			forEach($result as $row)
@@ -93,7 +93,7 @@
 					$option_id = $voteOption["option_id"];
 					echo( "<td>" );
 					if( array_key_exists($option_id, $row ) )
-						echo($row["$option_id"]);
+						echo(htmlspecialchars($row["$option_id"], ENT_QUOTES, 'ISO-8859-1'));
 					echo( "</td>" );
 				}
 				echo( "</tr>" );

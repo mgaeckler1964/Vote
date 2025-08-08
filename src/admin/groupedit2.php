@@ -1,7 +1,7 @@
 <?php
 	require_once( "includes/components/login.php" ); 
 	$id = $_POST["id"];
-	$email = $_POST["uiemail"];
+	$email = urlencode($_POST["uiemail"]);
 		
 		
 	if( !$id )

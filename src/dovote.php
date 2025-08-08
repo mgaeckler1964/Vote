@@ -28,7 +28,7 @@
 		$reason = VOTE_CODE;
 	}
 	if( array_key_exists( "vote_name", $_COOKIE ) )
-		$vote_name = $_COOKIE["vote_name"];
+		$vote_name = urldecode($_COOKIE["vote_name"]);
 	else
 		$vote_name = "";
 
@@ -60,7 +60,7 @@
 					<tr>
 						<td class="fieldLabel">Name</td>
 						<td>
-							<input type="text" name="name" required value="<?php echo($vote_name); ?>">
+							<input type="text" name="name" required value="<?php echo( htmlspecialchars($vote_name, ENT_QUOTES, 'ISO-8859-1') ); ?>">
 						</td>
 					</tr>
 					<tr>
@@ -84,9 +84,9 @@
 								forEach( $voteOptions as $voteOption )
 								{
 									if( $mode == 0 )
-										echo( "<input type='checkbox' name='voteoption${voteOption['option_id']}' value='${voteOption['option_id']}' >{$voteOption['text']}<br>" );
+										echo( "<input type='checkbox' name='voteoption${voteOption['option_id']}' value='${voteOption['option_id']}' >". htmlspecialchars($voteOption['text'], ENT_QUOTES, 'ISO-8859-1') ."<br>" );
 									else
-										echo( "<input type='radio' {$checked} name='voteoption' value='${voteOption['option_id']}' >{$voteOption['text']}<br>" );
+										echo( "<input type='radio' {$checked} name='voteoption' value='${voteOption['option_id']}' >". htmlspecialchars($voteOption['text'], ENT_QUOTES, 'ISO-8859-1') ."<br>" );
 									$checked = "";
 								}
 				
