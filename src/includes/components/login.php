@@ -59,7 +59,7 @@
 	$guestCount = 0;
 	
 	$dbConnect = openDatabase();
-	if( $dbConnect && !is_object( $dbConnect ) )
+	if( $dbConnect )
 	{
 		$guestCount = getGuestCount( $dbConnect );
 		if( isset( $userId ) && $userId )

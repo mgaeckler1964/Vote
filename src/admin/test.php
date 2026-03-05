@@ -18,7 +18,7 @@
 			if( !is_file( $config ) )
 				echo( "<p>$config nicht geladen.</p>" );
 
-			if( $database != "PG" && $database != "MYSQL"  && $database != "ORA" )
+			if( $database != "PG" && $database != "MYSQL"  && $database != "MYSQLi"  && $database != "ORA" )
 				echo "<p>Ungültiger Datenbanktyp $database.</p>";
 			
 			if( $database == "PG" )
@@ -32,6 +32,11 @@
 			{
 				if( !function_exists("mysql_connect") )
 					echo "<p>MySQL-modul nicht verfügbar.</p>";
+			}
+			else if( $database == "MYSQLi" )
+			{
+				if( !function_exists("mysqli_connect") )
+					echo "<p>MySQLi-modul nicht verfügbar.</p>";
 			}
 			else if( $database == "ORA" )
 			{
@@ -59,6 +64,13 @@
 					echo "<p><b>MySQL Client</b> " . mysql_get_client_info() .           "</p>";
 					echo "<p><b>MySQL Prot</b> "   . mysql_get_proto_info ($dbConnect) . "</p>";
 					echo "<p><b>MySQL Host</b> "   . mysql_get_host_info  ($dbConnect) . "</p>";
+				}
+				else if( $database == "MYSQLi" )
+				{
+					echo "<p><b>MySQL Server</b> " . mysqli_get_server_info($dbConnect) . "</p>";
+					echo "<p><b>MySQL Client</b> " . mysqli_get_client_info() .           "</p>";
+					echo "<p><b>MySQL Prot</b> "   . mysqli_get_proto_info ($dbConnect) . "</p>";
+					echo "<p><b>MySQL Host</b> "   . mysqli_get_host_info  ($dbConnect) . "</p>";
 				}
 				else if( $database == "ORA" )
 				{

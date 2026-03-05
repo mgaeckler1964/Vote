@@ -52,6 +52,12 @@
 				}
 			}
 		}
+		else if( $database == "MYSQLi" )
+		{
+			$dbConn = mysqli_connect( $mysqlHost, $mysqlUser, $mysqlPassword, $mysqlDB );
+			if( !$dbConn )
+				$dbConn = new errorClass( "Keine Verbindung mit der Datenbank " . $mysqlHost .", ". $mysqlUser .", " . mysqli_connect_error());
+		}
 		else if( $database == "ORA" )
 		{
 			$dbConn = ociplogon( $oraUser, $oraPassword, $oraConnection );
@@ -127,7 +133,7 @@
 	}
 	function queryDatabase( $dbConn, $query, $params=null )
 	{
-		global $database;
+		global $database, $queryResultArray;
 		
 		if( $database == "PG" )
 		{
@@ -157,6 +163,43 @@
 			$error = mysql_error( $dbConn );
 			if( !$queryResult )
 				$queryResult = new errorClass( "SQL Befehl (" . $query .") nicht ausführbar. ". mysql_error($dbConn), $params );
+		}
+		else if( $database == "MYSQLi" )
+		{
+			if( $params )
+			{
+				for( $i=0; $i<count($params); $i++ )
+				{
+					if( is_string($params[$i]) )
+					{
+						$params[$i] = stripslashes( $params[$i] );
+						$params[$i] = mysqli_real_escape_string( $dbConn, $params[$i] );
+					}
+				}
+					
+				$query = mergeParams( $query, $params );
+			}
+
+//echo $query;				
+			$queryResult = mysqli_query( $dbConn, $query );
+			if( !$queryResult )
+			{
+				$error = mysqli_error( $dbConn );
+				$queryResult = new errorClass( "SQL Befehl (" . $query .") nicht ausführbar. ". mysqli_error($dbConn), $params );
+			}
+			else
+			{
+				if( !isset($queryResultArray) )
+				{
+					$queryResultArray = array( $queryResult );
+					$queryResult = 1;
+				}
+				else
+				{
+					array_push($queryResultArray, $queryResult);
+					$queryResult = count($queryResultArray);;
+				}
+			}
 		}
 		else if( $database == "ORA" )
 		{
@@ -197,7 +240,7 @@
 	
 	function fetchQueryRow( $queryResult )
 	{
-		global $database;
+		global $database, $queryResultArray;
 
 		if( $database == "PG" )
 		{
@@ -228,6 +271,35 @@
 				}
 			}
 		}
+		else if( $database == "MYSQLi" )
+		{
+			$queryResult = $queryResultArray[$queryResult-1];
+
+			$fields = mysqli_num_fields( $queryResult );
+			$row = mysqli_fetch_assoc( $queryResult );
+/*
+						
+			if( $row )
+			{
+				for( $i=0; $i<$fields; $i++ )
+				{
+					$type = mysqli_field_type( $queryResult, $i );
+					if( $type == "date" )
+					{
+						$name = mysqli_field_name( $queryResult, $i );
+						$value = $row[$name];
+						if( $value && $value != "0000-00-00" )
+						{
+							$dates = explode( "-", $value );
+							$row[$name] = $dates[2].".".$dates[1].".".$dates[0];
+						}
+						else
+							$row[$name] = "";
+					}
+				}
+			}
+*/
+		}
 		else if( $database == "ORA" )
 		{
 			if( ocifetch( $queryResult ) )
@@ -253,15 +325,16 @@
 			$result = queryDatabase( $dbConn, "select nextval( 'idSeq' )" );
 		else if( $database == "ORACLE" )
 			$result = queryDatabase( $dbConn, "select idSeq.nextval from dual" );
-		else if( $database == "MYSQL" )
+		else if( $database == "MYSQL" || $database == "MYSQLi" )
 			$result = queryDatabase( $dbConn, "select max( " . $idField . " ) as nextval from " . $tableName );
+
 		if( $result && !is_object( $result ) )
 		{
 			$row = fetchQueryRow( $result );
 			if( $row )
 			{
 				$nextID = $row['nextval'];
-				if( $database == "MYSQL" )
+				if( $database == "MYSQL" || $database == "MYSQLi" )
 					$nextID += 1;
 			}
 		}

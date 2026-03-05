@@ -2,11 +2,13 @@
 	/*
 		select the database type:
 		MYSQL:	Connect to MySQL
+		MYSQLi:	Connect to MySQL using MySQLi interface (PHP 7 or higher)
 		PG:		Connect to PostgresSQL
 		ORA:	Connect to Oracle
 	*/
 	$database = "ORA";
 	$database = "MYSQL";
+	$database = "MYSQLi";
 	$database = "PG";
 	
 	
