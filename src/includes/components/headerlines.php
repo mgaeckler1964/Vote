@@ -22,7 +22,7 @@
 <?php } ?>
 <?php if( isset( $actUser ) && !$actUser['guest'] ) { ?>
 	<div class="MenuRightEntry">
-		<a href="password.php">Kennwort ändern</a>
+		<a href="password.php">Kennwort &auml;ndern</a>
 	</div>
 <?php } ?>
 <?php if( isset( $actUser ) && $actUser['administrator'] ) { ?>
