@@ -1,6 +1,6 @@
 <hr>
 <p class="bottomMenu">
-	<a href="index.php">&gt;&gt; Adminmenü</a>
+	<a href="index.php">&gt;&gt; Adminmen&uuml;</a>
 </p>
 <p class="footerLines">
 	<?php

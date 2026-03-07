@@ -52,6 +52,7 @@
 	define( "VOTE_EXPIRED", "Abstimmung abgelaufen" );
 	define( "VOTE_WAITING", "Abstimmung noch nicht erlaubt" );
 	define( "VOTE_CODE", "Falscher Code" );
+	define( "SELF_REGISTER", 1 );
 
 	$backupTables = array( "user_tab", "group_member", "user_login_prot", "strassen", "terminals", "adressen" );
 

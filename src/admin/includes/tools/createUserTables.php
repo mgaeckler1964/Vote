@@ -16,7 +16,8 @@
 			"guest			varchar(1), ".
 			"loginenabled	varchar(1), ".
 			"administrator	varchar(1), ".
-			"is_group		varchar(1) ".
+			"is_group		varchar(1), ".
+			"remoteip		varchar(32)".
 		")";
 					
 		$result = queryDatabase( $dbConnect, $query );
@@ -31,7 +32,7 @@
 			$result = queryDatabase( $dbConnect, "create sequence idSeq start 2" );
 		else if( $database == "ORA" )
 			$result = queryDatabase( $dbConnect, "create sequence idSeq start with 2" );
-		else if( $database == "MYSQL" )
+		else if( $database == "MYSQL" || $database == "MYSQLi" )
 			$result = true;
 		else
 			$result = false;
@@ -91,6 +92,25 @@
 		if( !$result || is_object( $result ) )
 		{
 			$error .= "<p>groupMemberIdx konnte nicht erstellt werden.</p>\n";
+			if( is_object( $result ) )
+				$error .= "<p>". $result->errorText . "<br>" . $result->errorDetail . "</p>";
+		}
+
+		// Updates for existing database:
+		$query = "alter table user_tab add column remoteip varchar(32)";
+		$result = queryDatabase( $dbConnect, $query );
+		if( !$result || is_object( $result ) )
+		{
+			$error .= "<p>user_tab konnte nicht aktualisiert werden.</p>\n";
+			if( is_object( $result ) )
+				$error .= "<p>". $result->errorText . "<br>" . $result->errorDetail . "</p>";
+		}
+
+		$query = "alter table user_tab add column cr_time int";
+		$result = queryDatabase( $dbConnect, $query );
+		if( !$result || is_object( $result ) )
+		{
+			$error .= "<p>user_tab konnte nicht aktualisiert werden (2).</p>\n";
 			if( is_object( $result ) )
 				$error .= "<p>". $result->errorText . "<br>" . $result->errorDetail . "</p>";
 		}

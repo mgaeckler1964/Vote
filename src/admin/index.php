@@ -27,7 +27,7 @@
 			<p><a href="migrate.php">Tabellen migrieren</a></p>
 		<?php } ?>
 		<hr>
-		<p><a href="../index.php">Hauptmenü</a></p>
+		<p><a href="../index.php">Hauptmen&uuml;</a></p>
 
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>

@@ -189,6 +189,33 @@
 
 		return $userCount;
 	}
+	function checktUser4register( $dbConnect, $email, $remoteip )
+	{
+		$userCount = 0;
+		$queryResult = queryDatabase( $dbConnect, "select count(*) as usercount from user_tab where email=$1", array(urlencode($email)) );
+		if( $queryResult && !is_object( $queryResult ) )
+		{
+			$queryResult = fetchQueryRow( $queryResult );
+			if( $queryResult )
+				$userCount = $queryResult['usercount'];
+		}
+		if( $userCount==0 )
+		{
+			$queryResult = queryDatabase( $dbConnect, "select count(*) as usercount from user_tab where remoteip=$1 and cr_time > $2", array($remoteip, time()-86400 ) );
+			if( $queryResult && !is_object( $queryResult ) )
+			{
+				$queryResult = fetchQueryRow( $queryResult );
+				if( $queryResult )
+				{
+					$userCount = $queryResult['usercount'];
+					if( $userCount < 5 )		// up to 5 users per day and remote ip is ok
+						$userCount = 0;
+				}
+			}
+		}
+
+		return $userCount;
+	}
 	
 	function getGuestCount( $dbConnect )
 	{

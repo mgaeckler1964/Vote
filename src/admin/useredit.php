@@ -1,4 +1,18 @@
-<?php require_once( "includes/components/login.php" ); ?>
+<?php 
+require_once( "../includes/tools/config.php" );
+if( !defined('SELF_REGISTER') || SELF_REGISTER==0 )
+	$selfRegisterOK = 0;
+else
+	$selfRegisterOK = 1;
+
+if($selfRegisterOK && array_key_exists( "register", $_GET ))
+	$selfRegisterMode = 1;
+else
+	$selfRegisterMode = 0;
+
+if( !$selfRegisterMode )
+	require_once( "includes/components/login.php" );
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
 <html>
@@ -8,7 +22,7 @@
 			$title = "Benutzer Erfassen";
 			include_once( "includes/components/defhead.php" );
 
-			if( array_key_exists( "id", $_GET ) )
+			if( array_key_exists( "id", $_GET ) && !$selfRegisterMode )
 				$id = $_GET["id"];
 		?>
 	</head>
@@ -43,9 +57,14 @@
 
 		<form action="useredit2.php" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="<?php echo $id;?>">
+
+			<?php if( $selfRegisterMode ) { ?>
+				<input type="hidden" name="register" value="1">
+			<?php } ?>
+
 			<table>
-				<tr><td class="fieldLabel">Name</td><td><input type="text" name="nachname" value="<?php echo htmlspecialchars($nachname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
-				<tr><td class="fieldLabel">Vorname</td><td><input type="text" name="vorname" value="<?php echo htmlspecialchars($vorname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">Name</td><td><input type="text" required="required" name="nachname" value="<?php echo htmlspecialchars($nachname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">Vorname</td><td><input type="text" required="required" name="vorname" value="<?php echo htmlspecialchars($vorname, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">Anschrift</td><td><input type="text" name="strasse" value="<?php echo htmlspecialchars($strasse, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">Postfach</td><td><input type="text" name="postfach" value="<?php echo htmlspecialchars($postfach, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 				<tr><td class="fieldLabel">Land-PLZ Ort</td><td>
@@ -54,17 +73,21 @@
 					<input type=text" name="ort" value="<?php echo htmlspecialchars($ort, ENT_QUOTES, 'ISO-8859-1'); ?>">
 				</td></tr>
 				<tr><td class="fieldLabel">E-Mail</td><td><input type="email" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
-				<tr><td class="fieldLabel">Passwort</td><td><input type="password" name="uipassword"></td></tr>
-				<tr><td class="fieldLabel">Passwort (Wdh)</td><td><input type="password" name="uipassword2"></td></tr>
-				<tr><td class="fieldLabel">Administrator</td><td><input type="checkbox" name="administrator" value="X"
-					<?php if( isset( $user ) && $user['administrator'] ) echo "checked"; ?>
-				></td></tr>
-				<tr><td class="fieldLabel">Gast-Konto</td><td><input type="checkbox" name="guest" value="X"
-					<?php if( isset( $user ) && $user['guest'] ) echo "checked"; ?>
-				></td></tr>
-				<tr><td class="fieldLabel">Anmeldung erlaubt</td><td><input type="checkbox" name="loginenabled" value="X"
-					<?php if( isset( $user ) && $user['loginenabled'] ) echo "checked"; ?>
-				></td></tr>
+
+				<?php if( !$selfRegisterMode ) { ?>
+					<tr><td class="fieldLabel">Passwort</td><td><input type="password" name="uipassword"></td></tr>
+					<tr><td class="fieldLabel">Passwort (Wdh)</td><td><input type="password" name="uipassword2"></td></tr>
+					<tr><td class="fieldLabel">Administrator</td><td><input type="checkbox" name="administrator" value="X"
+						<?php if( isset( $user ) && $user['administrator'] ) echo "checked"; ?>
+					></td></tr>
+					<tr><td class="fieldLabel">Gast-Konto</td><td><input type="checkbox" name="guest" value="X"
+						<?php if( isset( $user ) && $user['guest'] ) echo "checked"; ?>
+					></td></tr>
+					<tr><td class="fieldLabel">Anmeldung erlaubt</td><td><input type="checkbox" name="loginenabled" value="X"
+						<?php if( isset( $user ) && $user['loginenabled'] ) echo "checked"; ?>
+					></td></tr>
+				<?php } ?>
+
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel">&nbsp;</td>
@@ -90,6 +113,9 @@
 				echo( "</table>" );
 			}
 		?>
-		<?php include( "includes/components/footerlines.php" ); ?>
+		<?php 
+			if( !$selfRegisterMode )
+				include( "includes/components/footerlines.php" ); 
+		?>
 	</body>
 </html>

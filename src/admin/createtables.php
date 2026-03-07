@@ -1,4 +1,4 @@
-//<?php require_once( "includes/components/login.php" ); ?>
+<?php require_once( "includes/components/login.php" ); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
 <html>

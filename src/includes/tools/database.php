@@ -54,6 +54,7 @@
 		}
 		else if( $database == "MYSQLi" )
 		{
+			mysqli_report(MYSQLI_REPORT_OFF);
 			$dbConn = mysqli_connect( $mysqlHost, $mysqlUser, $mysqlPassword, $mysqlDB );
 			if( !$dbConn )
 				$dbConn = new errorClass( "Keine Verbindung mit der Datenbank " . $mysqlHost .", ". $mysqlUser .", " . mysqli_connect_error());

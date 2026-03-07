@@ -193,6 +193,14 @@
 							}
 						</script>
 					<?php }?>
+					<?php if( defined('SELF_REGISTER') && SELF_REGISTER!=0 ) { ?>
+						<script language="JavaScript">
+							function selfRegister()
+							{
+								window.open("admin/useredit.php?register=1");
+							}
+						</script>
+					<?php }?>
 
 				</head>
 				<body>
@@ -223,6 +231,8 @@
 									<?php
 										if( $guestCount )
 											echo( "<input type='button' Value='Gastzugang' onClick='loginGuest();'>\n" );
+										if( defined('SELF_REGISTER') && SELF_REGISTER!=0 )
+											echo( "<input type='button' Value='Registieren...' onClick='selfRegister();'>\n" );
 									?>
 								</td>
 							</tr>
