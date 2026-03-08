@@ -1,8 +1,16 @@
 <?php
-	$guest = "X";
+	$guest = "X";		// login as guest, if not yet logged in
 	require_once( "includes/components/login.php" ); 
 
 	$vote_id = $_GET["vote_id"];
+
+	if( array_key_exists("elect_id", $_GET ) )
+		$elect_id = $_GET["elect_id"];
+	if( array_key_exists("now", $_GET ) )
+		$now = $_GET["now"];
+	if( array_key_exists("numVotes", $_GET ) )
+		$numVotes = $_GET["numVotes"];
+
 	$vote = getVote( $dbConnect, $vote_id );
 	$name = $vote['name'];
 	$question = $vote['question'];
@@ -27,8 +35,11 @@
 		$canVote = false;
 		$reason = VOTE_CODE;
 	}
+		
 	if( array_key_exists( "vote_name", $_COOKIE ) )
 		$vote_name = urldecode($_COOKIE["vote_name"]);
+	else if( !$actUser['guest'] )
+		$vote_name = $actUser['nachname'] . " " . $actUser['vorname'];
 	else
 		$vote_name = "";
 
@@ -56,6 +67,14 @@
 			<form action="dovote2.php" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="vote_id" value="<?php echo $vote_id;?>">
 				<input type="hidden" name="code" value="<?php echo $code;?>">
+				<?php
+					if( isset($elect_id) )
+						echo( "<input type='hidden' name='elect_id' value='" . $elect_id ."'>\n" );
+					if( isset($now) )
+						echo( "<input type='hidden' name='now' value='" . $now ."'>\n" );
+					if( isset($numVotes) )
+						echo( "<input type='hidden' name='numVotes' value='" . $numVotes ."'>\n" );
+				?>
 				<table>
 					<tr>
 						<td class="fieldLabel">Name</td>

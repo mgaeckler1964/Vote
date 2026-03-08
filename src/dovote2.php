@@ -1,5 +1,5 @@
 <?php
-	$guest = "X";
+	$guest = "X";		// login as guest, if not yet logged in
 	require_once( "includes/components/login.php" ); 
 	$vote_id = $_POST["vote_id"];
 	$name = urlencode($_POST['name']);
@@ -25,13 +25,48 @@
 		$canVote = false;
 		$reason = VOTE_CODE;
 	}
-
+	if( $canVote && array_key_exists( "elect_id", $_POST ) && array_key_exists( "now", $_POST ) && array_key_exists( "numVotes", $_POST ) )
+	{
+		$elect_id = $_POST["elect_id"];
+		$now = $_POST["now"];
+		$numVotes = $_POST["numVotes"];
+		$queryResult = queryDatabase( 
+			$dbConnect, 
+			"select count(*) as num_votes from elections ".
+			"where elect_id = $1 and vote_id = $2 and the_time = $3",
+			array( $elect_id, $vote_id, $now )
+		);
+		if( !$queryResult || is_object($queryResult) )
+		{
+			$error = $queryResult;
+			$canVote = false;
+			$reason = "Database Error";
+		}
+		$row = fetchQueryRow( $queryResult );
+		if( !$row )
+		{
+			$canVote = false;
+			$reason = "Database Error";
+		}
+		else
+		{
+			if( $row['num_votes'] != $numVotes )
+			{
+				$canVote = false;
+				$reason = "IllegaL Update";
+			}
+		}
+	}
+	
 	if( $canVote )
 	{
 		$cookieName = "vote".$vote_id;
 		if( array_key_exists( $cookieName, $_COOKIE ) )
 		{
 			$elect_id = $_COOKIE[$cookieName];
+		}
+		if( isset($elect_id) )
+		{
 			$queryResult = queryDatabase( 
 				$dbConnect, 
 				"delete from elections ".
@@ -51,6 +86,8 @@
 		if( is_numeric( $elect_id ) )
 		{
 			setcookie( "vote_name", $name, 0, "/" );
+			$numVotes = 0;
+			$now = time();
 			if( $mode == 0 )
 			{
 				forEach( $voteOptions as $voteOption )
@@ -63,13 +100,14 @@
 						$option_id2 = $_POST[$param];
 						if( $option_id2 == $option_id )
 						{
+							$numVotes++;
 							$queryResult = queryDatabase( 
 								$dbConnect, 
 								"insert into elections ".
 								"( elect_id, vote_id, name, option_id, the_time ) ".
 								"values ".
 								"( $1, $2, $3, $4, $5 )", 
-								array( $elect_id, $vote_id, $name, $option_id, time() )
+								array( $elect_id, $vote_id, $name, $option_id, $now )
 							);
 							print_r($name);
 							if( !$queryResult || is_object($queryResult) )
@@ -84,13 +122,14 @@
 			else
 			{
 				$option_id = $_POST["voteoption"];
+				$numVotes++;
 				$queryResult = queryDatabase( 
 					$dbConnect, 
 					"insert into elections ".
 					"( elect_id, vote_id, name, option_id, the_time ) ".
 					"values ".
 					"( $1, $2, $3, $4, $5 )", 
-					array( $elect_id, $vote_id, $name, $option_id, time() )
+					array( $elect_id, $vote_id, $name, $option_id, $now )
 				);
 				if( !$queryResult || is_object($queryResult) )
 				{
@@ -133,6 +172,12 @@
 				if( $code )
 					$resultUrl = $resultUrl . "&code=" . $code;
 				echo( '<p><a href="' . $resultUrl . '">Ergebniss</a></p>');
+
+				$changeUrl = "dovote.php?vote_id=".$vote_id;
+				if( $code )
+					$changeUrl = $changeUrl . "&code=" . $code;
+				$changeUrl = $changeUrl . "&elect_id=" . $elect_id . "&now=" . $now . "&numVotes=". $numVotes;
+				echo( '<p><a href="' . $changeUrl . '">&Auml;ndern</a></p>');
 			}
 			
 		?>
