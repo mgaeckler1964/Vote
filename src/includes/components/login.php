@@ -1,4 +1,6 @@
 <?php
+	header('Content-Type: text/html; charset=ISO-8859-1');
+
 	if( is_file( "includes/tools/database.php" ) )
 		include_once( "includes/tools/database.php" );
 	if( is_file( "../includes/tools/database.php" ) )

@@ -134,7 +134,7 @@
 							echo( "<a href='upVote.php?vote_id=${vote_id}&prev_id={$prev}&option_id=${option_id}'>Oben</a>&nbsp;" );
 						}
 						$prev = $option_id;
-						echo( "<a href='delFromVote.php?vote_id={$vote_id}&option_id={$option_id}'>Löschen</a>");
+						echo( "<a href='delFromVote.php?vote_id={$vote_id}&option_id={$option_id}'>L&ouml;schen</a>");
 					}
 					else
 						echo("-");
