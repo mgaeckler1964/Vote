@@ -1,17 +1,31 @@
 <?php 
-require_once( "../includes/tools/config.php" );
-if( !defined('SELF_REGISTER') || SELF_REGISTER==0 )
-	$selfRegisterOK = 0;
-else
-	$selfRegisterOK = 1;
-
-if($selfRegisterOK && array_key_exists( "register", $_GET ))
-	$selfRegisterMode = 1;
-else
+	require_once( "../includes/tools/config.php" );
+	if( !defined('SELF_REGISTER') || SELF_REGISTER==0 )
+		$selfRegisterOK = 0;
+	else
+		$selfRegisterOK = 1;
+	
 	$selfRegisterMode = 0;
-
-if( !$selfRegisterMode )
-	require_once( "includes/components/login.php" );
+	$profileMode = 0;
+	$adminMode = 1;
+	if($selfRegisterOK)
+	{
+		if( array_key_exists( "register", $_GET ) )
+		{
+			$selfRegisterMode = 1;
+			$adminMode = 0;
+		}
+		else if( array_key_exists( "profile", $_GET ) )
+		{
+			$profileMode = 1;
+			$adminMode = 0;
+		}
+	}
+	
+	if( $adminMode )
+		require_once( "includes/components/login.php" );
+	else if( $profileMode )
+		require_once( "../includes/components/login.php" );
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
@@ -19,7 +33,13 @@ if( !$selfRegisterMode )
 	<head>
 		<link rel="stylesheet" type="text/css" href="../support/styles.css">
 		<?php
-			$title = "Benutzer Erfassen";
+			if( $profileMode )
+			{
+				$title = "Profil &auml;ndern";
+				$id = $actUser['id'];
+			}
+			else
+				$title = "Benutzer erfassen";
 			include_once( "includes/components/defhead.php" );
 
 			if( array_key_exists( "id", $_GET ) && !$selfRegisterMode )
@@ -29,6 +49,13 @@ if( !$selfRegisterMode )
 	<body class="center">
 		<?php
 			include( "includes/components/headerlines.php" );
+
+			if( isset($id) && $profileMode && $actUser['id'] != $id )
+			{
+				// something went wrong
+				echo("<p>Zugriff verweigert.</p></body></html>");
+				exit();
+			}
 			if( isset( $id ) )
 			{
 				$user = getUser( $dbConnect, $id );
@@ -60,6 +87,8 @@ if( !$selfRegisterMode )
 
 			<?php if( $selfRegisterMode ) { ?>
 				<input type="hidden" name="register" value="1">
+			<?php } else if( $profileMode ) { ?>
+				<input type="hidden" name="profile" value="1">
 			<?php } ?>
 
 			<table>
@@ -72,11 +101,24 @@ if( !$selfRegisterMode )
 					<input type=text" name="plz" size=16 maxlength=16 value="<?php echo htmlspecialchars($plz, ENT_QUOTES, 'ISO-8859-1'); ?>">
 					<input type=text" name="ort" value="<?php echo htmlspecialchars($ort, ENT_QUOTES, 'ISO-8859-1'); ?>">
 				</td></tr>
-				<tr><td class="fieldLabel">E-Mail</td><td><input type="email" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
+				<tr><td class="fieldLabel">E-Mail</td><td>
+					<?php if( $profileMode ) { ?>
+						<input type="hidden" name="profile" value="1">
+						<input type="hidden" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>">
+						<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>
+					<?php } else { ?>
+						<input type="email" required="required" name="uiemail" value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'ISO-8859-1'); ?>">
+					<?php } ?>
+				</td></tr>
 
+				<?php if( $profileMode ) { ?>
+					<tr><td class="fieldLabel">Altes Passwort</td><td><input type="password" name="old_password"></td></tr>
+				<?php } ?>
 				<?php if( !$selfRegisterMode ) { ?>
 					<tr><td class="fieldLabel">Passwort</td><td><input type="password" name="uipassword"></td></tr>
 					<tr><td class="fieldLabel">Passwort (Wdh)</td><td><input type="password" name="uipassword2"></td></tr>
+				<?php } ?>
+				<?php if( $adminMode ) { ?>
 					<tr><td class="fieldLabel">Administrator</td><td><input type="checkbox" name="administrator" value="X"
 						<?php if( isset( $user ) && $user['administrator'] ) echo "checked"; ?>
 					></td></tr>
@@ -101,7 +143,7 @@ if( !$selfRegisterMode )
 			</table>
 		</form>
 		<?php
-			if( $id )
+			if( $id && !$profileMode )
 			{
 				$queryResult = queryDatabase( $dbConnect, "select * from user_login_prot where userid = $1 order by logindate desc", array( $id ) );
 				if( $queryResult && !is_object( $queryResult ) )
@@ -109,12 +151,12 @@ if( !$selfRegisterMode )
 					echo( "<hr><table><tr><th>Datum</th><th>IP-Adresse</th></tr>\n" );
 					while( $row = fetchQueryRow( $queryResult ) )
 						echo( "<tr><td>" . formatTimeStamp($row['logindate']) . "</td><td>{$row['remoteip']}</td></tr>\n" );
+					echo( "</table>" );
 				}
-				echo( "</table>" );
 			}
 		?>
 		<?php 
-			if( !$selfRegisterMode )
+			if( !$selfRegisterMode  && !$profileMode )
 				include( "includes/components/footerlines.php" ); 
 		?>
 	</body>

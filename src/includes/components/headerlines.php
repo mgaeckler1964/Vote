@@ -22,7 +22,11 @@
 <?php } ?>
 <?php if( isset( $actUser ) && !$actUser['guest'] ) { ?>
 	<div class="MenuRightEntry">
-		<a href="password.php">Kennwort &auml;ndern</a>
+		<?php if( defined('SELF_REGISTER') && SELF_REGISTER!=0 ) { ?>
+			<a href="admin/useredit.php?profile=1">Profil &auml;ndern</a>
+		<?php } else { ?>
+			<a href="password.php">Kennwort &auml;ndern</a>
+		<?php } ?>
 	</div>
 <?php } ?>
 <?php if( isset( $actUser ) && $actUser['administrator'] ) { ?>
