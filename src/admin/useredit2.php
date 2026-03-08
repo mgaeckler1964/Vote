@@ -167,10 +167,18 @@
 		$result = false;
 	}
 
-	if( $result && $profileMode && $actUser['password'] && $actUser['password'] != mgMd5Hash($old_password) )
+	if( $result && $profileMode )
 	{
-		$result = false;
-		$error = "Falsche Kennwort";
+		if( !$old_password )
+		{
+			$password = "";
+			$password2 = "";
+		}
+		else if( $actUser['password'] != mgMd5Hash($old_password) )
+		{
+			$result = false;
+			$error = "Falsche Kennwort";
+		}
 	}
 	if( $result && $password > "" && $password!=$password2)
 	{
