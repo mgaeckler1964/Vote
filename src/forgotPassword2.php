@@ -42,7 +42,25 @@
 				);
 				if( $result && !is_object( $result ) )
 				{
-					$messageBody ="Ihr neues Kennwort lautet " . $new_password;
+					if( $_SERVER['HTTPS'] )
+					{
+						$changePWurl = "https://";
+						$wantPort = 443;
+					}
+					else
+					{
+						$changePWurl = "http://";
+						$wantPort = 80;
+					}
+					$changePWurl = $changePWurl . $_SERVER['SERVER_NAME'];
+					$isPort = $_SERVER['SERVER_PORT'];
+					if( $isPort != $wantPort )
+						$changePWurl = $changePWurl . ":" . $isPort;
+					$changePWurl = $changePWurl . "/password.php?&email=" . $email . "&password=" . $new_password;
+					
+					
+					$messageBody ="Ihr neues Kennwort lautet " . $new_password . "\n" .
+						"Klicken Sie hier " . $changePWurl . ", um sich ein neues Passwort zu erstellen.\n";
 
 					if( $useNewMailer==true || !mail( $email, "Kennwortänderung", $messageBody ) )
 					{

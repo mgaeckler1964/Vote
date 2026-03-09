@@ -1,4 +1,10 @@
-<?php include_once( "includes/components/login.php" ); ?>
+<?php 
+	include_once( "includes/components/login.php" ); 
+	
+	$old_password = "";
+	if( array_key_exists( "password", $_GET ) )
+		$old_password = $_GET["password"];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
 <html>
@@ -15,7 +21,7 @@
 
 			<form action="password2.php" method="post">
 				<table>
-					<tr><td class="fieldLabel">Altes Kennwort</td><td><input type="password" name="old_password"></td></tr>
+					<tr><td class="fieldLabel">Altes Kennwort</td><td><input type="password" name="old_password" value="<?php echo htmlspecialchars($old_password, ENT_QUOTES, 'ISO-8859-1'); ?>"></td></tr>
 					<tr><td class="fieldLabel">Neues Kennwort</td><td><input type="password" name="new_password1"></td></tr>
 					<tr><td class="fieldLabel">Wiederholung</td><td><input type="password" name="new_password2"></td></tr>
 					<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
