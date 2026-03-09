@@ -54,7 +54,7 @@
 	define( "VOTE_CODE", "Falscher Code" );
 	define( "SELF_REGISTER", 1 );
 
-	$backupTables = array( "user_tab", "group_member", "user_login_prot", "strassen", "terminals", "adressen" );
+	$backupTables = array( "user_tab", "group_member", "user_login_prot", "votes", "vote_options", "elections" );
 
 	date_default_timezone_set('Europe/Vienna');
 ?>

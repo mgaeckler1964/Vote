@@ -24,7 +24,7 @@
 				if( $error > "" )
 					echo( $error );
 
-
+/*
 				$query = "drop table votes";
 					
 				$result = queryDatabase( $dbConnect, $query );
@@ -32,6 +32,7 @@
 				{
 					echo "<p>Votes konnte nicht gelöscht werden.</p>\n";
 				}
+*/
 				$query = "create table votes ( ".
 						"vote_id		int				not null 	primary key, ".
 						"user_id		int				not null, ".
@@ -49,6 +50,7 @@
 					echo "<p>Votes konnte nicht erstellt werden.</p>\n";
 				}
 
+/*
 				$query = "drop table vote_options";
 					
 				$result = queryDatabase( $dbConnect, $query );
@@ -56,6 +58,7 @@
 				{
 					echo "<p>Options konnte nicht gelöscht werden.</p>\n";
 				}
+*/
 				$query = "create table vote_options ( ".
 						"option_id		int				not null    primary key, ".
 						"vote_id		int				not null, ".
@@ -68,6 +71,7 @@
 					echo "<p>Options konnte nicht erstellt werden.</p>\n";
 				}
 
+/*
 				$query = "drop table elections";
 					
 				$result = queryDatabase( $dbConnect, $query );
@@ -75,6 +79,7 @@
 				{
 					echo "<p>Elections konnte nicht gelöscht werden.</p>\n";
 				}
+*/
 				$query = "create table elections ( ".
 						"elect_id		int				not null, ".
 						"vote_id		int				not null, ".
