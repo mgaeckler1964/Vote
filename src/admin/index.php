@@ -26,6 +26,10 @@
 		<?php if( is_file( "migrate.php" ) ) { ?>
 			<p><a href="migrate.php">Tabellen migrieren</a></p>
 		<?php } ?>
+		<?php if( is_file( "app.php" ) ) { ?>
+			<hr>
+			<p><a href="app.php"><?php echo(APPLICATION_NAME) ?> konfigurieren</a></p>
+		<?php } ?>
 		<hr>
 		<p><a href="../index.php">Hauptmen&uuml;</a></p>
 
