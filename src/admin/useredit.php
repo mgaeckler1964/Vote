@@ -38,6 +38,8 @@
 				$title = "Profil &auml;ndern";
 				$id = $actUser['id'];
 			}
+			else if( $selfRegisterMode )
+				$title = "Benutzer registrieren";
 			else
 				$title = "Benutzer erfassen";
 			include_once( "includes/components/defhead.php" );
