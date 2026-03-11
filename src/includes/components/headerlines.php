@@ -1,38 +1,12 @@
-<img src="support/logo.gif" align="right" height="128">
-<?php
-	if( $title )
-		echo "<h1>$title</h1>";
-	else
-		echo "<h1>" . APPLICATION_NAME  . "</h1>";
+<?php 
+	include("commonheaderlines.php"); 
+
+	$menuLeft = array (
+		array( "href" => "index.php", "label" => "Start" ),
+		array( "href" => "votes.php", "label" => "Abstimmungen" ),
+		array( "href" => "new.php", "label" => "Neu" ),
+		array( "href" => "impressum.php", "label" => "Impressum" )
+	);
+	$menu = array( "left" => $menuLeft );
+	include("commonmenu.php" );
 ?>
-<hr style="clear:right;">
-<div class="Menu"><div class="MenuLeftEntry">
-	<a href="index.php">Start</a>
-</div><div class="MenuLeftEntry">
-	<a href="votes.php">Abstimmungen</a>
-</div><div class="MenuLeftEntry">
-	<a href="new.php">Neu</a>
-</div><div class="MenuLeftEntry">
-	<a href="impressum.php">Impressum</a>
-</div>
-<?php if( isset( $actUser ) ) { ?>
-	<div class="MenuRightEntry">
-		<a href="logout.php">Abmelden</a>
-	</div>
-<?php } ?>
-<?php if( isset( $actUser ) && !$actUser['guest'] ) { ?>
-	<div class="MenuRightEntry">
-		<?php if( defined('SELF_REGISTER') && SELF_REGISTER!=0 ) { ?>
-			<a href="admin/useredit.php?profile=1">Profil &auml;ndern</a>
-		<?php } else { ?>
-			<a href="password.php">Kennwort &auml;ndern</a>
-		<?php } ?>
-	</div>
-<?php } ?>
-<?php if( isset( $actUser ) && $actUser['administrator'] ) { ?>
-	<div class="MenuRightEntry">
-		<a href="admin/index.php">Administration</a>
-	</div>
-<?php } ?>
-</div>
-<hr style="clear:right;">
