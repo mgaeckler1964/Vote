@@ -17,7 +17,19 @@
 
 			if( is_file( "templates/impressum.html" ) )
 				include_once( "templates/impressum.html" );
-
+			else { 
+				echo "<P>".
+					APPLICATION_NAME .", entwickelt von".
+				"<BR>".
+					"Martin G&auml;ckler".
+				"<BR>".
+					"Hofmannsthalweg 14".
+				"<BR>".
+					"<U><B>4030 Linz</B></U>".
+				"<BR>".
+					"<U>&Ouml;sterreich</U>".
+				"</P>";
+			}
 			include( "includes/components/footerlines.php" );
 		 ?>
 	</body>
