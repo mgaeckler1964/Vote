@@ -1,4 +1,7 @@
-<?php require_once( "includes/components/login.php" ); ?>
+<?php 
+	require_once( "includes/components/login.php" ); 
+	$adminMenu = true;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 <html>
 	<head>
@@ -26,7 +29,7 @@
 		<?php if( is_file( "migrate.php" ) ) { ?>
 			<p><a href="migrate.php">Tabellen migrieren</a></p>
 		<?php } ?>
-		<?php if( is_file( "app.php" ) ) { ?>
+		<?php if( is_file( "app.php" ) ) { $appMenu = true; ?>
 			<hr>
 			<p><a href="app.php"><?php echo(APPLICATION_NAME) ?> konfigurieren</a></p>
 		<?php } ?>

@@ -1,14 +1,64 @@
+<style>
+	div.popupMenu
+	{
+		display:none;
+		visibility:hidden;
+		position: absolute;
+		background-color: #000000;
+	}
+</style>
+<script>
+	function showMenu(theMenuId)
+	{
+		var theMenu = document.getElementById( theMenuId );
+		theMenu.style.display = "block";
+		theMenu.style.visibility = "visible";
+	}
+	function hideMenu(theMenuId)
+	{
+		var theMenu = document.getElementById( theMenuId );
+		theMenu.style.display = "none";
+		theMenu.style.visibility = "hidden";
+	}
+	popup1 = "popup1";
+</script>
 <?php
 	if( isset( $menu ) )
 	{
+		$leftID = 1;
 		echo( "<div class='Menu'>" );
 
 		if( array_key_exists('left', $menu ) )
 		{
 			foreach( $menu['left'] as $mentry )
 			{
-				echo( "<div class='MenuLeftEntry'>" );
-					echo( "<a href='{$mentry['href']}'>{$mentry['label']}</a>" );
+				if( array_key_exists("href", $mentry) )
+					$href = $mentry["href"];
+				else
+					$href = "#";
+					
+				$doPopup = array_key_exists('submenu', $mentry );
+				echo( "<div class='MenuLeftEntry'" );
+				if( $doPopup )
+				{
+					echo( " onmouseover='showMenu(\"popup{$leftID}\");' onmouseout='hideMenu(\"popup{$leftID}\");'" );
+				}
+				echo( "><a href='{$href}'>{$mentry['label']}</a>" );
+					if( $doPopup )
+					{
+						$subMenu = $mentry['submenu'];
+						echo( "<div class='popupMenu' id='popup1'>" );
+							foreach($subMenu as $submentry)
+							{
+								if( array_key_exists("href", $submentry) )
+									$href = $submentry["href"];
+								else
+									$href = "#";
+								echo( "<a href='{$href}'>{$submentry['label']}</a><br>" );
+							}
+						echo( "</div>" );
+						$leftID++;
+					}
 				echo( "</div>" );
 			}
 		}
