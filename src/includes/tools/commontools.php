@@ -1,6 +1,14 @@
 <?php
 	$isMobile = 0;
 
+	function startSession()
+	{
+		if( !isset($_SESSION ) )
+			session_start();
+		if( !array_key_exists( "time", $_SESSION ) )
+			$_SESSION['time'] = time();
+	}
+
 	function createDate( $dateString )
 	{
 		$date = array();
