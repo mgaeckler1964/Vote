@@ -64,23 +64,6 @@
 		return date( "Y-m-d H:i:s", $timestamp );
 	}
 	
-	function fullname2Html( $full_name )
-	{
-		$full_name = str_replace( " ", "&nbsp;", $full_name );
-		
-		return $full_name;
-	}
-	
-	function mgMd5Hash( $password )
-	{
-		if( function_exists( "hash" ) )
-			$password = hash( "md5", $password );
-		else if( function_exists( "mhash" ) )
-			$password = bin2hex( mhash( MHASH_MD5, $password ) );
-
-		return $password;
-	}
-	
 	function isMobileClient()
 	{
 		global $isMobile;
@@ -98,6 +81,85 @@
 		return $isMobile;
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------
+	// password
+	// ----------------------------------------------------------------------------------------------------------------------
+
+	function mgMd5Hash( $password )
+	{
+		if( function_exists( "hash" ) )
+			$password = hash( "md5", $password );
+		else if( function_exists( "mhash" ) )
+			$password = bin2hex( mhash( MHASH_MD5, $password ) );
+
+		return $password;
+	}
+	
+	function createPasswordStyle() { ?>
+		<style>
+			#toggleBtn {
+				position: relative;
+				top: 15px;
+				transform: translateY(-50%);
+				background: none;
+				border: none;
+				cursor: pointer;
+				color: #666;
+			}
+			#toggleBtn:hover { color: #000; }
+		</style>
+	<?php }
+
+	function createPasswordScript($pw1,$pw2,$toogleBtn,$eyeIcon) { ?>
+		<script>
+			const pw1 = document.getElementById('<?php echo $pw1;?>');
+			const pw2 = document.getElementById('<?php echo $pw2;?>');
+			const toggleBtn = document.getElementById('<?php echo $toogleBtn;?>');
+			const eyeIcon = document.getElementById('<?php echo $eyeIcon;?>');
+			
+			toggleBtn.addEventListener('click', () => {
+				const isPassword = pw1.type === 'password';
+		
+				// Typ umschalten
+				pw1.type = isPassword ? 'text' : 'password';
+				pw2.type = pw1.type;
+				  
+				// Icon anpassen (Beispiel: Auge offen / Auge mit Querstrich)
+				if (isPassword) {
+					// SVG für "Auge offen" (Standard)
+					eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+				} else {
+					// Zurück zum normalen Auge
+					eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+				}
+			});
+		</script>
+	<?php }
+
+	function createPasswordInput($id,$name,$toggleBtn=null,$eyeIcon=null) { ?>
+		<input type="password" id="<?php echo $id;?>" name="<?php echo $name;?>">
+		<?php if( $toggleBtn && $eyeIcon ) { ?>
+			<button type="button" id="<?php echo $toggleBtn;?>" aria-label="Passwort anzeigen">
+				<svg id="<?php echo $eyeIcon;?>" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+					viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+					<circle cx="12" cy="12" r="3"></circle>
+				</svg>
+			</button>
+		<?php }
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------
+	// user
+	// ----------------------------------------------------------------------------------------------------------------------
+
+	function fullname2Html( $full_name )
+	{
+		$full_name = str_replace( " ", "&nbsp;", $full_name );
+		
+		return $full_name;
+	}
+	
 	function fetchUser( $queryResult )
 	{
 		global $dbConnect;
@@ -326,6 +388,11 @@
 
 		return $error;
 	} 
+
+	// ----------------------------------------------------------------------------------------------------------------------
+	// groups
+	// ----------------------------------------------------------------------------------------------------------------------
+
 	function getGroupMembers( $id )
 	{
 		global $dbConnect;

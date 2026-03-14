@@ -81,7 +81,10 @@
 			}
 			else
 			{
-				$menuRight[] = array( "href" => "login.php", "label" => "Anmelden" );
+				if( is_file( "login.php" ) )
+				{
+					$menuRight[] = array( "href" => "login.php", "label" => "Anmelden" );
+				}
 				if( defined('SELF_REGISTER') && SELF_REGISTER!=0 )
 				{
 					$menuRight[] = array( "href" => "admin/useredit.php?register=1", "label" => "Registrieren" );
