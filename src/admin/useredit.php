@@ -162,7 +162,12 @@
 					<td>
 						<input type="submit" value="Speichern">
 						<?php
-							echo "<input type='button' onClick='window.history.back();' value='Abbruch'>";
+							echo "<input type='button' onClick='";
+							if( $adminMode )
+								echo "window.history.back();";
+							else
+								echo "window.document.location.href=\"../index.php\";";
+							echo "' value='Abbruch'>";
 						?>
 					</td>
 				</tr>
