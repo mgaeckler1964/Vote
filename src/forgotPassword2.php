@@ -17,7 +17,7 @@
 	    return $sRnd;
 	}
 	
-	$message = "Kennwort wurde erstellt, bitte prüfen Sie Ihre Mail";
+	$message = "Kennwort wurde erstellt, bitte pr&uuml;fen Sie Ihre Mail";
 	$email = $_POST["email"];
 	if( $email )
 	{
@@ -103,14 +103,14 @@
 <html>
 	<head>
 		<?php
-			$title = APPLICATION_NAME . " - Kennwortänderung";
+			$title = APPLICATION_NAME . " - Kennwort&auml;nderung";
 			include_once( "includes/components/defhead.php" );
 		?>
 	</head>
 	<body>
 		<?php include( "includes/components/headerlines.php" ); ?>
 
-		<p><?php echo( $message ); print_r($useNewMailer); echo( $message ); ?></p>
+		<p><?php echo( $message ); ?></p>
 
 		<?php include( "includes/components/footerlines.php" ); ?>
 	</body>
