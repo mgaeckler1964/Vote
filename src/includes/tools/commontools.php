@@ -4,7 +4,11 @@
 	function startSession()
 	{
 		if( !isset($_SESSION ) )
+		{
+			//session_cache_limiter('private');
+			session_cache_limiter('');
 			session_start();
+		}
 		if( !array_key_exists( "time", $_SESSION ) )
 			$_SESSION['time'] = time();
 	}
