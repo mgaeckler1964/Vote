@@ -256,5 +256,6 @@
 		unset( $userOK );
 		unset( $email );
 		unset( $password );
+		unset( $error );
 	}
 ?>
