@@ -26,6 +26,8 @@
 		require_once( "includes/components/login.php" );
 	else if( $profileMode )
 		require_once( "../includes/components/login.php" );
+	else
+		include_once("../includes/tools/commontools.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
