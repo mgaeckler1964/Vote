@@ -29,6 +29,7 @@
 	<body class="center">
 		<?php
 			include( "includes/components/headerlines.php" );
+			createUserTableWarning($dbConnect);
 		?>
 
 		<form action="groupedit2.php" method="post" enctype="multipart/form-data">

@@ -95,6 +95,7 @@
 				$ort = "";
 				$email = "";
 			}
+			createUserTableWarning($dbConnect);
 		?>
 
 		<form action="useredit2.php" method="post" enctype="multipart/form-data">

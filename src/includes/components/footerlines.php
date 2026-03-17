@@ -1,7 +1,8 @@
 <hr>
 <p class="footerLines">
 	<?php
-		startSession();
+		if( !headers_sent() )
+			startSession();
 		
 		echo( APPLICATION_NAME . " " . APPLICATION_COPYRIGHT . " " );
 		if( isset($_SESSION) && array_key_exists('time', $_SESSION) )

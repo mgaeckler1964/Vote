@@ -19,6 +19,38 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------
+	// DB schema
+	// ----------------------------------------------------------------------------------------------------------------------
+
+	function hasTable( $dbConnect, $tableName )
+	{
+		$queryResult = queryDatabase(
+			$dbConnect,
+			"select count(*) ".
+			"from information_schema.tables ".
+			"where upper(table_name) = upper($1)",
+			array( $tableName )
+		);
+		if( $queryResult && !is_object( $queryResult ) )
+		{
+			$rec = fetchQueryRow( $queryResult );
+		}
+		return current($rec) > 0;
+	}
+	
+	function hasUserTable($dbConnect)
+	{
+		return hasTable( $dbConnect, "user_tab" );
+	}
+
+	function createUserTableWarning($dbConnect)
+	{
+		if( !hasUserTable($dbConnect) ) { ?>
+			<div style="background-color:#FF0000; color:#FFFF00; font-size:18pt; text-align:center;">Benutzertabelle nicht vorhanden. Erzeugen Sie erst alle Tabellen.</div>
+		<?php }
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------
 	// session
 	// ----------------------------------------------------------------------------------------------------------------------
 
