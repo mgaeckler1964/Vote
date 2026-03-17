@@ -92,7 +92,7 @@
 		else if( isset( $email ) && $email )
 		{
 			$user = getUser( $dbConnect, 0, $email );
-			if( !$user['id'] )
+			if( !$user || !$user['id'] )
 			{
 				$userOK = false;
 				$error = "Unbekannter Benutzer#2" . $email;

@@ -1,6 +1,26 @@
 <?php
 	$isMobile = 0;
-	date_default_timezone_set("Europe/Vienna");
+
+	function isMobileClient()
+	{
+		global $isMobile;
+		
+		if( $isMobile === 0 )
+		{
+			$isMobile = false;
+			if( isset( $_SERVER ) && array_key_exists( "HTTP_USER_AGENT", $_SERVER ) )
+			{
+				$agent = $_SERVER["HTTP_USER_AGENT"];
+				$isMobile = (stripos( $agent, "Mobil" ) !== false) || (stripos( $agent, "Android" ) !== false);
+			}
+		}
+
+		return $isMobile;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------
+	// session
+	// ----------------------------------------------------------------------------------------------------------------------
 
 	function startSession()
 	{
@@ -13,6 +33,28 @@
 		if( !array_key_exists( "time", $_SESSION ) )
 			$_SESSION['time'] = time();
 	}
+
+	function readRequestSetting( $requestName, $sessionName, $request, $default )
+	{
+		if( array_key_exists( $requestName, $request ) )
+		{
+			$result = $request[$requestName];
+			$_SESSION[$sessionName] = $result;
+			
+		}
+		else if( array_key_exists( $sessionName, $_SESSION ) )
+			$result = $_SESSION[$sessionName];
+		else
+			$result = $default;
+		
+		return $result;
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------
+	// date/time
+	// ----------------------------------------------------------------------------------------------------------------------
+
+	date_default_timezone_set("Europe/Vienna");
 
 	function createDate( $dateString )
 	{
@@ -65,21 +107,84 @@
 		return date( "Y-m-d", $timestamp )."T".date( "H:i", $timestamp );
 	}
 	
-	function isMobileClient()
-	{
-		global $isMobile;
-		
-		if( $isMobile === 0 )
-		{
-			$isMobile = false;
-			if( isset( $_SERVER ) && array_key_exists( "HTTP_USER_AGENT", $_SERVER ) )
-			{
-				$agent = $_SERVER["HTTP_USER_AGENT"];
-				$isMobile = (stripos( $agent, "Mobil" ) !== false) || (stripos( $agent, "Android" ) !== false);
-			}
-		}
+	// ----------------------------------------------------------------------------------------------------------------------
+	// formControls
+	// ----------------------------------------------------------------------------------------------------------------------
 
-		return $isMobile;
+	function createField( $fName, $fType, $fValue, $readOnly, $optional, $autofocus=false, $size=-1, $maxLen=-1 )
+	{
+		if( $autofocus )
+			$autofocus = "autofocus";
+		else
+			$autofocus = null;
+		
+		if( !is_numeric($size) )
+			$size = -1;
+		if( !is_numeric($maxLen) )
+			$maxLen = -1;
+
+		if( $fType == "number" )
+		{
+			if( !is_numeric($fValue) )
+				$fValue = null;
+			if( $size < 0 )
+				$size = 16;
+			if( $maxLen < 0 )
+				$maxLen = 16;
+		}
+		else
+			$fValue = htmlspecialchars($fValue, ENT_QUOTES, 'ISO-8859-1');
+		$required = $optional ? "" : "required";
+		if( $readOnly )
+			echo $fValue;
+		else
+		{
+			if( $size >= 0 )
+				$size = "size=".$size;
+			else
+				$size = "";
+			
+			if( $maxLen >= 0 )
+				$maxLen = "maxlength=".$maxLen;
+			else
+				$maxLen = "";
+
+			echo "<input type='{$fType}' name='{$fName}' value='{$fValue}' {$required} ${size} ${maxLen}  ${autofocus}>";
+		}
+	}
+	
+	function createMemo( $fName, $fValue, $readOnly, $optional, $maxLen=-1, $cols=-1, $rows=-1 )
+	{
+		if( !is_numeric($rows) )
+			$rows = -1;
+		if( !is_numeric($cols) )
+			$cols = -1;
+		if( !is_numeric($maxLen) )
+			$maxLen = -1;
+
+		$fValue = htmlspecialchars($fValue, ENT_QUOTES, 'ISO-8859-1');
+		$required = $optional ? "" : "required";
+		if( $readOnly )
+			echo $fValue;
+		else
+		{
+			if( $rows >= 0 )
+				$rows = "rows=".$rows;
+			else
+				$rows = "";
+			
+			if( $cols >= 0 )
+				$cols = "cols=".$cols;
+			else
+				$cols = "";
+			
+			if( $maxLen >= 0 )
+				$maxLen = "maxlength=".$maxLen;
+			else
+				$maxLen = "";
+
+			echo "<textarea name='{$fName}' {$required} ${rows} ${cols} ${maxLen}>{$fValue}</textarea>";
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------

@@ -28,9 +28,9 @@
 			"select * ".
 			"from user_tab ".
 			"where upper(email) like upper($1) ".
-			"and is_group is not null ".
+			"and is_group = $2 ".
 			"order by email",
-			array( $groupName."%" )
+			array( $groupName."%", "X" )
 		);
 		if( isset( $queryResult ) && !is_object($queryResult) )
 		{
@@ -63,5 +63,7 @@
 				echo "<a href='javascript:nextPage();'>&gt;&gt;</a>";
 			echo "</p>\n";
 		}
+		else
+			print_r($queryResult);
 	}
 ?>

@@ -15,8 +15,8 @@
 
 	if( !isset( $userName ) )
 	{
-		if( array_key_exists( "userName", $_GET ) )
-			$userName = $_GET["userName"];
+		if( array_key_exists( "su", $_GET ) )
+			$userName = $_GET["su"];
 	}
 
 	$hitsPerPage = isMobileClient() ? 3 : 20;
@@ -28,9 +28,9 @@
 			"select * ".
 			"from user_tab ".
 			"where upper(nachname) like upper($1) ".
-			"and is_group is null ".
+			"and coalesce(is_group, $2) <> $3 ".
 			"order by nachname, vorname",
-			array( urlencode($userName)."%" )
+			array( urlencode($userName)."%", "_", "X" )
 		);
 		if( isset( $queryResult ) && !is_object($queryResult) )
 		{
@@ -68,5 +68,7 @@
 				echo "<a href='javascript:nextPage();'>&gt;&gt;</a>";
 			echo "</p>\n";
 		}
+		else
+			print_r($queryResult);
 	}
 ?>

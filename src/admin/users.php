@@ -1,8 +1,8 @@
 <?php require_once( "includes/components/login.php" ); ?>
 <?php
 
-	if( array_key_exists( "userName", $_POST ) )
-		$userName = $_POST["userName"];
+	if( array_key_exists( "su", $_POST ) )
+		$userName = $_POST["su"];
 
 	$page=0;
 ?>
@@ -18,7 +18,7 @@
 
 		<script language="JavaScript">
 			var page = <?php echo $page; ?>;
-			var userName = "<?php echo $userName; ?>";
+			var userName = "<?php if(isset($userName)) echo $userName; ?>";
 			
 
 			function showPage()
@@ -40,7 +40,7 @@
 						document.getElementById("searchResult").innerHTML=xmlhttp.responseText;
 					}
 				}
-				xmlhttp.open("GET","users2.php?page="+page+"&userName="+userName,true);
+				xmlhttp.open("GET","users2.php?page="+page+"&su="+userName,true);
 				xmlhttp.send();
 			}
 			function prevPage()
@@ -63,7 +63,7 @@
 
 		<form name="searchForm" action="users.php" method="post">
 			<table>
-				<tr><td class="fieldLabel">Name</td><td><input type="text" name="userName" value="<?php if( isset( $userName ) ) echo $userName; ?>"></td></tr>
+				<tr><td class="fieldLabel">Name</td><td><input type="text" name="su" value="<?php if( isset( $userName ) ) echo $userName; ?>" autocomplete="off"></td></tr>
 				<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 				<tr>
 					<td class="fieldLabel"></td>
