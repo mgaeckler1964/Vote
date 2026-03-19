@@ -352,7 +352,7 @@
 		if( !$email )
 			$email = "__dummyMailNeverUsed__";
 
-		if( !$id )
+		if( !$id || !is_numeric($id) )
 			$id=0;
 		$user = array();
 		$queryResult = queryDatabase(
