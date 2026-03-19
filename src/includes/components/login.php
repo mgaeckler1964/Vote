@@ -1,21 +1,11 @@
 <?php
+	define( 'USER_ID', 'userID' );
+	define( 'PASSWORD', "password" );
+
 	header('Content-Type: text/html; charset=ISO-8859-1');
 
-	if( is_file( "includes/tools/database.php" ) )
-		include_once( "includes/tools/database.php" );
-	if( is_file( "../includes/tools/database.php" ) )
-		include_once( "../includes/tools/database.php" );
-
-	if( is_file( "includes/tools/commontools.php" ) )
-		include_once( "includes/tools/commontools.php" );
-	if( is_file( "../includes/tools/commontools.php" ) )
-		include_once( "../includes/tools/commontools.php" );
-
-	if( is_file( "includes/tools/tools.php" ) )
-		include_once( "includes/tools/tools.php" );
-	if( is_file( "../includes/tools/tools.php" ) )
-		include_once( "../includes/tools/tools.php" );
-
+	include_once( __DIR__ . "/../tools/database.php" );
+	include_once( __DIR__ . "/../tools/commontools.php" );
 
 	if( isset( $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ) )
 	{
@@ -23,10 +13,8 @@
 		list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = $tmpArray;
 	}
 
-
-
-	if( array_key_exists( "userID", $_COOKIE ) )
-		$userId = $_COOKIE["userID"];
+	if( array_key_exists( USER_ID, $_COOKIE ) )
+		$userId = $_COOKIE[USER_ID];
 
 	if( array_key_exists( "email", $_REQUEST ) )
 		$email = $_REQUEST["email"];
@@ -36,19 +24,19 @@
 	if( array_key_exists( "guest", $_POST ) )
 		$guest = $_POST["guest"];
 
-	if( array_key_exists( "password", $_POST ) )
+	if( array_key_exists( PASSWORD, $_POST ) )
 	{
-		$password = $_POST["password"];
+		$password = $_POST[PASSWORD];
 		$source = "post";
 	}
-	else if( array_key_exists( "password", $_GET ) )
+	else if( array_key_exists( PASSWORD, $_GET ) )
 	{
-		$password = $_GET["password"];
+		$password = $_GET[PASSWORD];
 		$source = "get";
 	}
-	else if( array_key_exists( "password", $_COOKIE ) )
+	else if( array_key_exists( PASSWORD, $_COOKIE ) )
 	{
-		$password = $_COOKIE["password"];
+		$password = $_COOKIE[PASSWORD];
 		$source = "cookie";
 	}
 	else if( array_key_exists( "PHP_AUTH_PW", $_SERVER ) )
@@ -86,7 +74,7 @@
 			{
 				$actUser = $user;
 				if( isset($password) )
-					setcookie( "password", $password, 0, "/" );
+					setcookie( PASSWORD, $password, 0, "/" );
 			}
 		}
 		else if( isset( $email ) && $email )
@@ -122,8 +110,8 @@
 				}
 				else
 				{
-					setcookie( "userID", $user['id'], 0, "/" );
-					setcookie( "password", $password, 0, "/" );
+					setcookie( USER_ID, $user['id'], 0, "/" );
+					setcookie( PASSWORD, $password, 0, "/" );
 					$actUser = $user;
 					queryDatabase(
 						$dbConnect,
@@ -143,9 +131,9 @@
 			}
 			else
 			{
-				setcookie( "userID", $user['id'], 0, "/" );
+				setcookie( USER_ID, $user['id'], 0, "/" );
 				if( isset($password) )
-					setcookie( "password", $password, 0, "/" );
+					setcookie( PASSWORD, $password, 0, "/" );
 				$actUser = $user;
 				queryDatabase(
 					$dbConnect,
@@ -173,9 +161,10 @@
 		$actUser = array( "id" => 1, 'administrator' => 'X' );
 	
 
-	if( !$userOK && !isset( $tryLogin) )
+	if( isset($ignoreCurrent) || (!$userOK && !isset( $tryLogin)) )
 	{
-		setcookie( "password", "", 0, "/" );
+		setcookie( PASSWORD, "", 0, "/" );
+		setcookie( USER_ID, "", 0, "/" );
 		?>
 	
 			<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
@@ -218,13 +207,14 @@
 							if( $guestCount )
 								echo( "<input type='hidden' value='' name='guest'>\n" );
 						?>
+						<input type="hidden" name="fromLogin" value="x">
 						<p>
-							<?php echo $error; ?><br>
+							<?php if( isset($error ) ) echo $error; ?><br>
 							Bitte melden Sie sich an.
 						</p>
 						<table>
 							<tr><td class="fieldLabel">Benutzername (E-Mail)</td><td><input type="email" required="required" autofocus="autofocus" name="email"></td></tr>
-							<tr><td class="fieldLabel">Kennwort</td><td><input type="password" name="password"></td></tr>
+							<tr><td class="fieldLabel">Kennwort</td><td><input type="password" name="<?php echo PASSWORD; ?>"></td></tr>
 							<tr><td class="fieldLabel">&nbsp;</td><td>&nbsp;</td></tr>
 							<tr>
 								<td class="fieldLabel">&nbsp;</td>
