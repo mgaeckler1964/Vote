@@ -186,6 +186,17 @@
 		}
 	}
 	
+	function createCheckbox( $fName, $fValue, $checkedValue, $readOnly )
+	{
+		if( is_numeric($checkedValue) && !is_numeric($fValue) )
+			$fValue = 0;
+
+		$readOnly = $readOnly ? "disabled" : "";
+		$checked = $fValue == $checkedValue ? "checked" : "";
+
+		echo "<input type='checkbox' name='{$fName}' value='{$checkedValue}' {$readOnly} {$checked}>";
+	}
+
 	function createMemo( $fName, $fValue, $readOnly, $optional, $maxLen=-1, $cols=-1, $rows=-1 )
 	{
 		if( !is_numeric($rows) )
