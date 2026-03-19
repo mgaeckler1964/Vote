@@ -25,9 +25,13 @@
 	if( $adminMode )
 		require_once( "includes/components/login.php" );
 	else if( $profileMode )
-		require_once( "../includes/components/login.php" );
+		require_once( __DIR__ . "/../includes/components/login.php" );
 	else
-		include_once("../includes/tools/commontools.php");
+	{
+		include_once(__DIR__ . "/../includes/tools/commontools.php");
+		include_once(__DIR__ . "/../includes/tools/database.php");
+		$dbConnect = openDatabase();
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Strict//EN">
 
