@@ -50,11 +50,16 @@
 						echo( "<div class='popupMenu' id='popup1'>" );
 							foreach($subMenu as $submentry)
 							{
-								if( array_key_exists("href", $submentry) )
-									$href = $submentry["href"];
+								if($submentry['label']=='-')
+									echo("<hr>");
 								else
-									$href = "#";
-								echo( "<a href='{$href}'>{$submentry['label']}</a><br>" );
+								{
+									if( array_key_exists("href", $submentry) )
+										$href = $submentry["href"];
+									else
+										$href = "#";
+									echo( "<a href='{$href}'>{$submentry['label']}</a><br>" );
+								}
 							}
 						echo( "</div>" );
 						$leftID++;

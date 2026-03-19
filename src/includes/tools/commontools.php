@@ -34,8 +34,9 @@
 		if( $queryResult && !is_object( $queryResult ) )
 		{
 			$rec = fetchQueryRow( $queryResult );
+			return current($rec) > 0;
 		}
-		return current($rec) > 0;
+		return false;
 	}
 	
 	function hasUserTable($dbConnect)
@@ -293,9 +294,14 @@
 
 	function fullname2Html( $full_name )
 	{
-		$full_name = str_replace( " ", "&nbsp;", $full_name );
-		
+		$full_name = str_replace( " ", "&nbsp;", htmlspecialchars($full_name, ENT_QUOTES, 'ISO-8859-1') );
+		;
 		return $full_name;
+	}
+
+	function getFullname4Html( $user )
+	{
+		return fullname2Html( $user['fullname'] );
 	}
 	
 	function fetchUser( $queryResult )
