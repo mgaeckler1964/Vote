@@ -383,7 +383,7 @@
 	function getUser( $dbConnect, $id, $email=null )
 	{
 		$user = getUser2( $dbConnect, $id, $email );
-		if( !is_array($user) || !array_key_exists( "loginenabled", $user ) ) {
+		if( (!is_array($user) || !array_key_exists( "loginenabled", $user )) && $email) {
 			$user = getUser2( $dbConnect, $id, urlencode($email) );
 		}
 		

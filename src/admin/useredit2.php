@@ -92,74 +92,87 @@
 		$loginenabled = array_key_exists( "loginenabled", $_POST ) ? $_POST["loginenabled"] : "";
 	}
 
-	if( !$id )
+	if( isset($email) )
 	{
-		if( !$selfRegisterMode || !checktUser4register( $dbConnect, $email, $_SERVER['REMOTE_ADDR'] ) )
+		$existUser = getUser( $dbConnect, $id, $email );
+		if( array_key_exists( 'id', $existUser ) && $existUser['id'] != $id )
 		{
-			$id = getNextID( $dbConnect, "user_tab", "id" );
+			$error = "E-Mail existiert bereits";
+			$result = false;
+		}
+	}
 	
+	if( !isset($error) )
+	{
+		if( !$id )
+		{
+			if( !$selfRegisterMode || !checktUser4register( $dbConnect, $email, $_SERVER['REMOTE_ADDR'] ) )
+			{
+				$id = getNextID( $dbConnect, "user_tab", "id" );
+		
+				$result = queryDatabase( $dbConnect,
+					"insert into user_tab (" .
+						"id, nachname, vorname, strasse, postfach, land, plz, ort, email, administrator, guest, loginenabled, cr_time, remoteip " .
+					")" .
+					"values" .
+					"(" .
+						"$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14" .
+					")",
+					array( 
+						$id, urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
+						urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled, time(), $_SERVER['REMOTE_ADDR']
+					)
+				);
+			}
+			else
+			{
+				$result = false;
+				$error = "Benutzer kann nicht angelegt werden.";
+			}
+		}
+		else if( $profileMode )
+		{
 			$result = queryDatabase( $dbConnect,
-				"insert into user_tab (" .
-					"id, nachname, vorname, strasse, postfach, land, plz, ort, email, administrator, guest, loginenabled, cr_time, remoteip " .
-				")" .
-				"values" .
-				"(" .
-					"$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14" .
-				")",
+				"update user_tab " .
+				"set nachname = $1," .
+					"vorname = $2," .
+					"strasse = $3," .
+					"postfach = $4," .
+					"land = $5," .
+					"plz = $6," .
+					"ort = $7 " .
+				"where id = $8",
 				array( 
-					$id, urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
-					urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled, time(), $_SERVER['REMOTE_ADDR']
+					urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
+					urlencode($plz), urlencode($ort),
+					$id 
 				)
 			);
 		}
 		else
 		{
-			$result = false;
-			$error = "Benutzer kann nicht angelegt werden.";
+			// admin mode
+			$result = queryDatabase( $dbConnect,
+				"update user_tab " .
+				"set nachname = $1," .
+					"vorname = $2," .
+					"strasse = $3," .
+					"postfach = $4," .
+					"land = $5," .
+					"plz = $6," .
+					"ort = $7, " .
+					"email = $8, " .
+					"administrator = $9, " .
+					"guest = $10, ".
+					"loginenabled = $11 " .
+				"where id = $12",
+				array( 
+					urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
+					urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled,
+					$id 
+				)
+			);
 		}
-	}
-	else if( $profileMode )
-	{
-		$result = queryDatabase( $dbConnect,
-			"update user_tab " .
-			"set nachname = $1," .
-				"vorname = $2," .
-				"strasse = $3," .
-				"postfach = $4," .
-				"land = $5," .
-				"plz = $6," .
-				"ort = $7 " .
-			"where id = $8",
-			array( 
-				urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
-				urlencode($plz), urlencode($ort),
-				$id 
-			)
-		);
-	}
-	else
-	{
-		// admin mode
-		$result = queryDatabase( $dbConnect,
-			"update user_tab " .
-			"set nachname = $1," .
-				"vorname = $2," .
-				"strasse = $3," .
-				"postfach = $4," .
-				"land = $5," .
-				"plz = $6," .
-				"ort = $7, " .
-				"email = $8, " .
-				"administrator = $9, " .
-				"guest = $10, ".
-				"loginenabled = $11 " .
-			"where id = $12",
-			array( 
-				urlencode($nachname), urlencode($vorname), urlencode($strasse), urlencode($postfach), urlencode($land), 
-				urlencode($plz), urlencode($ort), urlencode($email), $administrator, $guest, $loginenabled,
-				$id 
-			)
-		);
 	}
 	if( is_object( $result ) )
 	{
@@ -235,10 +248,16 @@
 				echo "<p>Fehler beim Speichern. E-Mail schon vergeben?</p>";
 		?>
 		<?php if( $adminMode ) { ?>
-			<p><a href="users.php">Benutzerliste</a></p>
+			<p>
+				<a href="users.php">&gt;&gt;&nbsp;Benutzerliste</a>
+				<a href="#" onClick="window.history.back();">&gt;&gt;&nbsp;Zur&uuml;ck</a>
+			</p>
 			<?php include( "includes/components/footerlines.php" ); ?>
 		<?php } else { ?>
-			<p><a href="../">Startseite</a></p>
+			<p>
+				<a href="../">&gt;&gt;&nbsp;Startseite</a> 
+				<a href="#" onClick="window.history.back();">&gt;&gt;&nbsp;Zur&uuml;ck</a>
+			</p>
 			<?php include( "../includes/components/footerlines.php" ); ?>
 		<?php } ?>
 	</body>
