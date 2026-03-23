@@ -22,6 +22,10 @@
 			$this->errorDetail = ob_get_clean();
 		}
 	};
+	function dbOK($queryResult)
+	{
+		return $queryResult && !is_object($queryResult);
+	}
 	function openDatabase()
 	{
 		global $database, $postgresDB, $mysqlHost, $mysqlUser, $mysqlDB, $mysqlPassword, $oraUser, $oraPassword, $oraConnection;
@@ -129,7 +133,6 @@
 			$newQuery .= "'";
 		}
 
-// echo "<br>$query<br>$newQuery<br>";
 		return $newQuery;
 	}
 	function queryDatabase( $dbConn, $query, $params=null )
@@ -329,7 +332,8 @@
 		else if( $database == "MYSQL" || $database == "MYSQLi" )
 			$result = queryDatabase( $dbConn, "select max( " . $idField . " ) as nextval from " . $tableName );
 
-		if( $result && !is_object( $result ) )
+	
+		if( dbOK($result) )
 		{
 			$row = fetchQueryRow( $result );
 			if( $row )
