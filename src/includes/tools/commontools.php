@@ -372,7 +372,7 @@
 
 		if( !$id || !is_numeric($id) )
 			$id=0;
-		$user = array();
+		$user = null;
 		$queryResult = queryDatabase(
 			$dbConnect,
 			"select nachname, vorname, strasse, postfach, land, plz, ort, email, ".

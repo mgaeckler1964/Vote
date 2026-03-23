@@ -95,7 +95,7 @@
 	if( isset($email) )
 	{
 		$existUser = getUser( $dbConnect, $id, $email );
-		if( array_key_exists( 'id', $existUser ) && $existUser['id'] != $id )
+		if( $existUser && array_key_exists( 'id', $existUser ) && $existUser['id'] != $id )
 		{
 			$error = "E-Mail existiert bereits";
 			$result = false;
