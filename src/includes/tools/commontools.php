@@ -157,7 +157,7 @@
 	function createField( $fName, $fType, $fValue, $readOnly, $optional, $autofocus=false, $size=-1, $maxLen=-1 )
 	{
 		if( $autofocus )
-			$autofocus = "autofocus";
+			$autofocus = "autofocus='1'";
 		else
 			$autofocus = null;
 		
@@ -177,7 +177,7 @@
 		}
 		else
 			$fValue = htmlspecialchars($fValue, ENT_QUOTES, 'ISO-8859-1');
-		$required = $optional ? "" : "required";
+		$required = $optional ? "" : "required='1'";
 		if( $readOnly )
 			echo $fValue;
 		else
@@ -198,10 +198,18 @@
 	
 	function createCheckbox( $fName, $fValue, $checkedValue, $readOnly )
 	{
-		$readOnly = $readOnly ? "disabled" : "";
-		$checked = $fValue == $checkedValue ? "checked" : "";
-
+		$readOnly = $readOnly ? "disabled='1'" : "";
+		$checked = $fValue == $checkedValue ? "checked='1'" : "";
 		echo "<input type='checkbox' name='{$fName}' value='{$checkedValue}' {$readOnly} {$checked}>";
+	}
+
+	function createDateTime($fName, $fValue, $readOnly=false, $optional=true, $step=60 )
+	{
+		$readOnly = $readOnly ? "readOnly='1'" : "";
+		$optional = $optional ? "" : "required='1'";
+		$fValue = $fValue && is_numeric($fValue) ? htmlspecialchars(formatHtmlTimeStamp($fValue)) : null;
+		
+		echo( "<input type='datetime-local' step='{$step}' {$optional} name='{$fName}' value='{$fValue}' {$readOnly}>" );
 	}
 
 	function createMemo( $fName, $fValue, $readOnly, $optional, $maxLen=-1, $cols=-1, $rows=-1 )
@@ -214,7 +222,7 @@
 			$maxLen = -1;
 
 		$fValue = htmlspecialchars($fValue, ENT_QUOTES, 'ISO-8859-1');
-		$required = $optional ? "" : "required";
+		$required = $optional ? "" : "required='1'";
 		if( $readOnly )
 			echo $fValue;
 		else
