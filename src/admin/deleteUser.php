@@ -2,6 +2,11 @@
 <?php
 	$id = $_GET["id"];
 		
+	if( is_file("includes/tools/deleteAppUser.php") )
+	{
+		include_once( "includes/tools/deleteAppUser.php" );
+		deleteAppUser($dbConnect, $id);
+	}
 	$error = deleteUser( $id );
 ?>
 
