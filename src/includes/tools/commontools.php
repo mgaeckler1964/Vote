@@ -22,9 +22,11 @@
 		return $rec && is_array($rec) && array_key_exists( $field, $rec ) && $rec[$field] ? 1 : 0;
 	}
 
-	function checkField( $rec, $field, $default )
+	function checkField( $rec, $field, $default, $wantNumeric=false )
 	{
-		return $rec && is_array($rec) && array_key_exists( $field, $rec ) ? $rec[$field] : $default;
+		return $rec && is_array($rec) && array_key_exists( $field, $rec ) && (!$wantNumeric || is_numeric($rec[$field]))
+			? $rec[$field] 
+			: $default;
 	}
 		
 
@@ -67,8 +69,7 @@
 
 	function startSession()
 	{
-		if( !isset($_SESSION ) )
-		{
+		if( !isset($_SESSION ) ) {
 			//session_cache_limiter('private');
 			session_cache_limiter('');
 			session_start();
@@ -77,13 +78,11 @@
 			$_SESSION['time'] = time();
 	}
 
-	function readRequestSetting( $requestName, $sessionName, $request, $default )
+	function readRequestSetting( $requestName, $sessionName, $request, $default, $wantNumeric=false )
 	{
-		if( array_key_exists( $requestName, $request ) )
-		{
-			$result = $request[$requestName];
+		if( array_key_exists( $requestName, $request ) ) {
+			$result = checkField( $request, $requestName, $default, $wantNumeric );
 			$_SESSION[$sessionName] = $result;
-			
 		}
 		else if( array_key_exists( $sessionName, $_SESSION ) )
 			$result = $_SESSION[$sessionName];
