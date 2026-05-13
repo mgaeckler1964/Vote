@@ -1,7 +1,9 @@
 <?php
 	setcookie( "userID", "", 0, "/" );
 	setcookie( "password", "", 0, "/" );
-
+	session_start();
+	$_SESSION = array();
+	session_destroy();
 	include_once( "includes/tools/config.php" );
 ?>
 
